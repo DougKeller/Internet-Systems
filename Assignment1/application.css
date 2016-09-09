@@ -1,0 +1,29 @@
+.header {
+  text-align: center;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+.header-content {
+  align-self: center;
+}
+
+.header-title {
+  font-size: 4rem;
+  padding: 0px;
+  margin: 0px;
+}
+
+.content {
+  background-color: white;
+  height: 100%;
+  padding: 0px;
+  margin: 0px;
+  width: 100%;
+}
+
+.related {
+  display: block;
+  font-size: 1.2rem
+}
