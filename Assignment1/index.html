@@ -10,11 +10,13 @@
     <script src="application.js"></script>
   </head>
   <body>
-    <div class="parallax background1">
-      <div class="header-content">
-        <h1 class="header-title">douglas keller</h1>
-        <h2 class="header-subtitle" id="date"></h2>
-        <br />
+
+    <section class="parallax forest-background" style="height: 100vh; flex-direction: column;">
+      <div class="center-justified title">
+        <h1>douglas keller</h1>
+        <h2 id="date"></h2>
+      </div>
+      <div>
         <ul class="related">
           <li>
             <a class="fa fa-github" href="https://github.com/DougKeller" target="_blank"></a>
@@ -27,38 +29,134 @@
           </li>
         </ul>
       </div>
-    </div>
-    <div class="content"></div>
-    <div class="parallax background2">
-      <div class="header-content">
-        <h1>internet systems programming</h1>
-        <h2 class="header-subtitle">fall 2016 - dr. xiao</h2>
+    </section>
+    <section class="content-wrapper"></section>
+
+    <section class="parallax city-background">
+      <div class="center-justified title">
+        <h1>education</h1>
       </div>
-    </div>
-    <div class="content"></div>
-    <div class="parallax background3">
-      <div class="header-content">
-        <h1>computer science</h1>
-        <h2 class="header-subtitle">assignment 1</h2>
+    </section>
+    <section class="content-wrapper">
+      <section class="content">
+        <div class="left-justified">
+          <h2>the univerisity of akron</h2>
+          <h3>college of arts and sciences</h3>
+          <br />
+          <span><b>major</b> computer science</span>
+          <span><b>minor</b> mathematics</span>
+        </div>
+        <div class="right-justified">
+          <span>2013 - 2017</span>
+          <span>3.82 gpa</span>
+        </div>
+      </section>
+    </section>
+
+    <section class="parallax mountain-background">
+      <div class="center-justified title">
+        <h1>work history</h1>
       </div>
-    </div>
+    </section>
+    <section class="content-wrapper">
+      <section class="content">
+        <div class="left-justified">
+          <h2>patriot software, inc.</h2>
+          <h3>software developer</h3>
+        </div>
+        <div class="right-justified">
+          <span>may 2015 - present</span>
+        </div>
+      </section>
+      <section class="content">
+        <div class="left-justified">
+          <h2>department of electrical engineering</h2>
+          <h3>web developer</h3>
+        </div>
+        <div class="right-justified">
+          <span>august - december 2015</span>
+        </div>
+      </section>
+      <section class="content">
+        <div class="left-justified">
+          <h2>tomtreyco mcdonald's</h2>
+          <h3>crew trainer</h3>
+        </div>
+        <div class="right-justified">
+          <span>september 2011 - may 2015</span>
+        </div>
+      </section>
+    </section>
+
+    <section class="parallax waterfall-background">
+      <div class="center-justified title">
+        <h1>skills</h1>
+      </div>
+    </section>
+    <section class="content-wrapper">
+      <section class="content">
+        <div class="left-justified">
+          <h2>Operating Systems</h2>
+          <ul>
+            <li>Microsoft Windows XP, 7, 8, 10</li>
+            <li>Ubuntu 16.04</li>
+            <li>macOS Sierra, El Capitan</li>
+          </ul>
+          <h2>Programming Languages</h2>
+          <ul>
+            <li>Ruby</li>
+            <li>Javascript</li>
+            <li>HTML</li>
+            <li>Java</li>
+            <li>Swift</li>
+            <li>C++</li>
+            <li>C#</li>
+            <li>C</li>
+            <li>Python</li>
+            <li>Matlab</li>
+            <li>Json</li>
+            <li>MySQL2</li>
+            <li>SQLite3</li>
+          </ul>
+          <h2>Frameworks and Libraries</h2>
+          <ul>
+            <li>Ruby on Rails</li>
+            <li>AngularJS</li>
+            <li>UIRouter</li>
+            <li>MomentJS</li>
+            <li>ExpressJS</li>
+            <li>ASP.NET</li>
+            <li>Apache Solr</li>
+          </ul>
+          <h2>Version Control Software</h2>
+          <ul>
+            <li>Git</li>
+            <li>SVN</li>
+          </ul>
+        </div>
+      </section>
+    </section>
+
+    <section class="parallax river-background" style="height: 25vh">
+    </section>
   </body>
 </html>
 
 <style>
-  html {
-    height: 100%;
+  html, body {
+    margin: 0px;
+    padding: 0px;
+    overflow-x: hidden;
   }
   body {
-    font-family: 'Roboto', sans-serif;
-    color: white;
-    margin: 0px;
     height: 100%;
+    font-family: 'Roboto', sans-serif;
+    color: #888;
   }
   a {
     font-size: 1rem;
-    color: #eee;
     text-decoration: none;
+    color: #eee;
   }
   ul {
     list-style: none;
@@ -67,5 +165,22 @@
   ul li {
     display: inline-block;
     padding: 0.5rem;
+  }
+  h1, h2, h3 {
+    padding: 0px;
+    margin: 0px;
+  }
+  h1 {
+    font-size: 4rem;
+  }
+  h2 {
+    font-size: 1.5rem;
+  }
+  h3 {
+    font-size: 1.2rem;
+    font-weight: 100;
+  }
+  span {
+    display: block;
   }
 </style>

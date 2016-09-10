@@ -1,46 +1,72 @@
 .parallax {
-  height: 100vh;
+  height: 75vh;
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 
-  text-align: center;
   display: flex;
   justify-content: center;
-}
-
-.background3 {
-  background-image: url(http://i.imgur.com/MqYX4uP.jpg);
-}
-
-.background2 {
-  background-image: url(http://www.onariart.com/i/retina-wallpaper-hd-o00.jpg);
-}
-
-.background1 {
-  background-image: url(http://i.imgur.com/KN1Ze62.jpg);
-}
-
-.header-content {
-  align-self: center;
-}
-
-.header-title {
-  font-size: 4rem;
+  align-items: center;
+  flex-direction: column;
   padding: 0px;
-  margin: 0px;
+  color: white;
 }
 
-.header-subtitle {
-  font-size: 1.5rem;
-  padding: 0px;
-  margin: 0px;
+.forest-background {
+  background-image: url('images/forest.jpg');
 }
 
+.city-background {
+  background-image: url('images/city.jpg');
+}
+
+.mountain-background {
+  background-image: url('images/mountain.jpg');
+}
+
+.waterfall-background {
+  background-image: url('images/waterfall.jpg');
+}
+
+.river-background {
+  background-image: url('images/river.jpg');
+}
+
+.title {
+  background: rgba(200, 200, 200, 0.1);
+  padding: 20px;
+  width: 100%;
+}
+
+.center-justified {
+  text-align: center;
+}
+
+.left-justified {
+  text-align: left;
+}
+
+.right-justified {
+  text-align: right;
+}
+
+.content-wrapper {
+  /*min-height: 10vh;*/
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
 .content {
-  background-color: white;
-  height: 50%;
+  display: flex;
+  justify-content: space-between;
+  width: 60%;
+  max-width: 1000px;
+}
+.content:not(:last-child) {
+  padding-bottom: 20px;
 }
 
 .related {
