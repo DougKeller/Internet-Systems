@@ -13,30 +13,34 @@
   color: white;
 }
 
-.forest-background {
-  background-image: url('images/forest.jpg');
+.cas-background {
+  background-image: url('images/cas.jpg');
 }
 
-.city-background {
-  background-image: url('images/city.jpg');
+.patriot-background {
+  background-image: url('images/patriot.jpg');
 }
 
-.mountain-background {
-  background-image: url('images/mountain.jpg');
+.doug-background {
+  background-image: url('images/doug.jpg');
 }
 
-.waterfall-background {
-  background-image: url('images/waterfall.jpg');
+.code-background {
+  background-image: url('images/code.jpg');
 }
 
-.river-background {
-  background-image: url('images/river.jpg');
+.computer-background {
+  background-image: url('images/computer.jpg');
 }
 
 .title {
   background: rgba(200, 200, 200, 0.1);
   padding: 20px;
   width: 100%;
+}
+
+.title.main {
+  color: #222244;
 }
 
 .center-justified {
