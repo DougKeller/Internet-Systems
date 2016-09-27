@@ -33,6 +33,10 @@
   background-image: url('images/computer.jpg');
 }
 
+.wood-background {
+  background-image: url('images/wood.jpg');
+}
+
 .title {
   background: rgba(200, 200, 200, 0.1);
   padding: 20px;
@@ -75,5 +79,11 @@
 
 .related {
   display: block;
-  font-size: 1.2rem
+  font-size: 1.2rem;
+}
+
+.login {
+  position: absolute;
+  right: 0px;
+  padding: 10px;
 }

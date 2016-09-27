@@ -5,11 +5,17 @@
     <meta charset="utf-8" />
     <link rel="stylesheet" type="text/css" href="application.css">
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Pavanam|Roboto:100" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
     <script src="application.js"></script>
   </head>
   <body>
+
+    <form class="login">
+      <input type="text" id="username" placeholder="Username" />
+      <input type="password" id="password" placeholder="Password" />
+      <input type="submit" value="Login" />
+    </form>
 
     <section class="parallax doug-background" style="height: 100vh; flex-direction: column;">
       <div class="center-justified main title">
@@ -132,6 +138,28 @@
       </section>
     </section>
 
+    <section class="parallax wood-background">
+      <div class="center-justified title">
+        <h1>Bio</h1>
+      </div>
+    </section>
+    <section class="content-wrapper">
+      <blockquote>
+        My name is Doug and I am a senior pursuing a Bachelor of Science degree in Computer Science with a minor in Mathematics. Here is where I would write more about my goals and ambitions, however all I am trying to do is demonstrate the use of a block quote in HTML. Tada! Now, enjoy this video!
+      </blockquote>
+
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/tjrIMKo-1Ds" frameborder="0" allowfullscreen></iframe>
+
+      <br />
+
+      Wilhelm Scream:
+
+      <audio controls>
+        <source src="audio/wilhelm.ogg" type="audio/ogg">
+        Your browser does not support the audio element.
+      </audio>
+    </section>
+
     <section class="parallax code-background" style="height: 25vh">
     </section>
   </body>
@@ -152,6 +180,9 @@
     font-size: 1rem;
     text-decoration: none;
     color: #eee;
+  }
+  a:hover {
+    color: #79e;
   }
   ul {
     list-style: none;
@@ -177,5 +208,26 @@
   }
   span {
     display: block;
+  }
+
+  input {
+    opacity: 0.5;
+    font-size: 1.1rem;
+    font-family: 'Pavanam', sans-serif;
+    padding: 4px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+  input[type=submit] {
+    opacity: 0.7;
+    background-color: #39f;
+    border: 1px solid #28e;
+    color: #fff;
+  }
+
+  blockquote {
+    width: 60vw;
   }
 </style>
