@@ -87,3 +87,10 @@
   right: 0px;
   padding: 10px;
 }
+
+.date {
+  position: absolute;
+  left: 0px;
+  padding: 10px;
+  color: #fff;
+}
