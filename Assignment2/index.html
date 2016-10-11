@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+  <head>
+    <title>
+      Doug Keller - Assignment 2
+    </title>
+    <script type="text/javascript" src="application.js"></script>
+  </head>
+  <body>
+    <h1>Factorial Calculator</h1>
+    <form onsubmit="calculateFactorial(); return false;">
+      <span>Enter a positive number:</span>
+      <br />
+      <input id="factorial-text" type="number" value="8" min="0" />
+      <input type="submit" value="Calculate!" />
+    </form>
+    Result:
+    <br />
+    <span id="factorial-result"></span>
+
+    <h1>Email Address Verifier</h1>
+    <h2>Option 1</h2>
+    <form onsubmit="verifyEmail(); return false;">
+      <span>Enter an email address then click 'Verify!'</span>
+      <br />
+      <input id="email-text" type="email" />
+      <input type="submit" value="Verify!" />
+    </form>
+    <h2>Option 2</h2>
+    <form onsubmit="return false;">
+      <span>Enter an email address. Your input will be verified as you type.</span>
+      <br />
+      <input id="email-text2" type="email" onkeyup="verifyEmail2();" />
+    </form>
+    Result:
+    <br />
+    <span id="email-result2"></span>
+  </body>
+</html>
+
+<style>
+.red {
+  color: red;
+}
+</style>

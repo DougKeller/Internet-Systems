@@ -94,3 +94,18 @@
   padding: 10px;
   color: #fff;
 }
+
+@keyframes animation {
+    from {background-color: #5a2;}
+    to {background-color: #1af;}
+}
+
+.animated {
+    width: 100px;
+    height: 100px;
+    background-color: #5a2;
+    animation-name: animation;
+    animation-duration: 5s;
+    animation-iteration-count: 100;
+    animation-direction: alternate;
+}
