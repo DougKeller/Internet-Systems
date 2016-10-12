@@ -4,23 +4,26 @@
     <title>
       Doug Keller - Assignment 2
     </title>
+    <link rel="stylesheet" type="text/css" href="application.css">
   </head>
   <body>
+
     <img id="mouse-chaser" src="http://emojipedia-us.s3.amazonaws.com/cache/cf/a4/cfa448f5122029a38ebab535dd7bdef7.png" />
-    <pre class="data">
+    <pre>
       Completed by Doug Keller on 10/11/2016 @ 8:00pm.
       The time is <span id="date"></span>
     </pre>
     <h1>Factorial Calculator</h1>
+
     <section>
       <input type="button" value="Calculate a Factorial" onmousedown="calculateFactorial();" />
-      Result:
+      <br />
       <span id="factorial-result"></span>
     </section>
 
     <h1>Email Address Verifier</h1>
 
-    <span>Note: Addresses must be in the format email@address.com</span>
+    <h2>Note: Addresses must be in the format email@address.com</h2>
 
     <section>
       Part 1
@@ -28,6 +31,7 @@
         <input id="email-input1" type="text" />
         <input type="submit" value="Verify!" />
       </form>
+      <br />
       <span id="email-output1"></span>
     </section>
 
@@ -36,6 +40,7 @@
     <section>
       Part 2
       <input id="email-input2" type="text" onkeyup="email2Handler();" />
+      <br />
       <span id="email-output2"></span>
     </section>
   </body>
@@ -46,34 +51,3 @@
 <script type="text/javascript" src="email_verification.js"></script>
 <script type="text/javascript" src="mouse_click.js"></script>
 <script type="text/javascript" src="application.js"></script>
-
-<style>
-  .red {
-    color: red;
-  }
-  .green {
-    color: green;
-  }
-  #mouse-chaser {
-    width: 100px;
-    height: 100px;
-    position: absolute;
-    transition: left 1s ease, top 1s ease;
-    z-index: -1;
-  }
-  body, html {
-    width: 100%;
-    text-align: center;
-  }
-  section {
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-content: space-between;
-    justify-content: space-between;
-    border: 1px solid black;
-    width: 300px;
-    padding: 30px;
-  }
-</style>
