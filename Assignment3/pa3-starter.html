@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Doug Keller - Assignment 3</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+  <script src="javascript/app.js"></script>
+  <script src="javascript/custom_page_factory.js"></script>
+  <script src="javascript/custom_content_factory.js"></script>
+  <script src="javascript/custom_section_directive.js"></script>
+  <script src="javascript/main_controller.js"></script>
+</head>
+<body ng-app="pa3" ng-controller="MainController">
+  <h1>Web Site Generator</h1>
+  <input type="button" value="Show Preview" ng-click="customPage.open()" />
+  <custom-section ng-model="customPage"></custom-section>
+</body>
+</html>
+
