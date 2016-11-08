@@ -18,13 +18,7 @@ angular.module('pa3.factories').factory('CustomSectionFactory', [
     ContentFactory.prototype.toHtmlString = function() {
       var htmlString = '<' + this.tag;
 
-      if (Object.keys(this.style).length > 0) {
-        htmlString += ' style="';
-        for (var prop in this.style) {
-          htmlString += prop + ': ' + this.style[prop] + '; ';
-        }
-        htmlString += '"';
-      }
+      htmlString += ' style="' + this.styleString() + '"';
 
       for (var prop in this.attributes) {
         htmlString += ' ' + prop + '="' + this.attributes[prop] + '"';
@@ -54,6 +48,14 @@ angular.module('pa3.factories').factory('CustomSectionFactory', [
 
       htmlString += '</' + this.tag + '>';
       return htmlString;
+    };
+
+    ContentFactory.prototype.styleString = function() {
+      var style = '';
+      for (var prop in this.style) {
+        style += prop + ': ' + this.style[prop] + '; ';
+      }
+      return style;
     };
 
     ContentFactory.prototype.clear = function() {

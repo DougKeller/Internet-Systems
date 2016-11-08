@@ -26,13 +26,13 @@ angular.module('pa3.controllers').controller('MainController', ['$scope', 'Custo
       tag: 'body'
     });
 
-    var pagePreview;
+    $scope.pagePreview;
     $scope.openPreview = function() {
-      if (pagePreview && pagePreview.isOpen()) {
-        pagePreview.close();
+      if ($scope.pagePreview && $scope.pagePreview.isOpen()) {
+        $scope.pagePreview.close();
       }
 
-      pagePreview = new CustomPageFactory({
+      $scope.pagePreview = new CustomPageFactory({
         name: $scope.title.content,
         content: [
           $scope.headerSection,
@@ -40,12 +40,12 @@ angular.module('pa3.controllers').controller('MainController', ['$scope', 'Custo
         ]
       });
 
-      pagePreview.open();
+      $scope.pagePreview.open();
     }
 
     $scope.closePreview = function() {
-      if (pagePreview && pagePreview.isOpen()) {
-        pagePreview.close();
+      if ($scope.pagePreview && $scope.pagePreview.isOpen()) {
+        $scope.pagePreview.close();
       }
     };
   }

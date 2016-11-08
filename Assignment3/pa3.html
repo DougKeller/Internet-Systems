@@ -7,26 +7,29 @@
   <script src="javascript/custom_page_factory.js"></script>
   <script src="javascript/custom_section_factory.js"></script>
   <script src="javascript/custom_section_directive.js"></script>
+  <script src="javascript/custom_style_directive.js"></script>
   <script src="javascript/main_controller.js"></script>
   <link rel="stylesheet" type="text/css" href="application.css">
   <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
   <link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond|Lato|Montserrat|Open+Sans|Oswald|Pavanam|Prociono|Raleway|Roboto:100|Shrikhand|Slabo+27px|Source+Sans+Pro" rel="stylesheet">
 </head>
 <body ng-app="pa3" ng-controller="MainController">
-  <h1>My Profile Generator</h1>
+  <h1>Personal Profile Creator</h1>
   <ul class="section-ul">
-    <li>
+    <li ng-if="!pagePreview || !pagePreview.isOpen()">
       <input type="button" value="Show Preview" ng-click="openPreview()" />
     </li>
-    <li>
+    <li ng-if="pagePreview.isOpen()">
+      <input type="button" value="Reload Preview" ng-click="openPreview()" />
+    </li>
+    <li ng-if="pagePreview.isOpen()">
       <input type="button" value="Close Preview" ng-click="closePreview()" />
     </li>
   </ul>
 
-  <h2>Page Title</h2>
+  <h2>Title</h2>
   <input type="text" ng-model="title.content" placeholder="Title" />
 
-  <h2>Page Content</h2>
   <custom-section ng-model="bodySection"></custom-section>
 
 </body>
