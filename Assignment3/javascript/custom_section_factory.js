@@ -70,11 +70,15 @@ angular.module('pa3.factories').factory('CustomSectionFactory', [
       }
     };
 
-    ContentFactory.prototype.addItem = function(type) {
-      this.content.push(new ContentFactory({
+    ContentFactory.prototype.addItem = function(type, index) {
+      if (angular.isUndefined(index)) {
+        index = this.content.length;
+      }
+      var newItem = new ContentFactory({
         tag: type,
         parent: this
-      }));
+      });
+      this.content.splice(index, 0, newItem);
     };
 
     ContentFactory.prototype.removeItem = function(item) {

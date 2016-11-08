@@ -33,53 +33,57 @@
     </tr>
   </table>
 
-  <div class="section-builder" ng-repeat="section in ngModel.content">
-    <ul class="section-ul">
-      <li>
-        <a class="fa fa-trash" style="color: red" ng-click="ngModel.removeItem(section)"></a>
-      </li>
-      <li>
-        <select ng-model="section.tag" ng-change="section.clear()">
-          <option value="h1">Title</option>
-          <option value="h2">Subtitle</option>
-          <option value="hr">Section Break</option>
-          <option value="p">Paragraph</option>
-          <option value="img">Image</option>
-          <option value="a">Link</option>
-          <option value="ul">Bullet List</option>
-          <option value="section">Section</option>
-        </select>
-      </li>
-    </ul>
+  <div ng-repeat="section in ngModel.content">
+    <a ng-if="$first" class="fa fa-plus" style="color: #39f; margin-bottom: 5px" ng-click="ngModel.addItem('h1', 0)"></a>
+    <div class="section-builder">
+      <ul class="section-ul">
+        <li>
+          <a class="fa fa-trash" style="color: red" ng-click="ngModel.removeItem(section)"></a>
+        </li>
+        <li>
+          <select ng-model="section.tag" ng-change="section.clear()">
+            <option value="h1">Title</option>
+            <option value="h2">Subtitle</option>
+            <option value="hr">Section Break</option>
+            <option value="p">Paragraph</option>
+            <option value="img">Image</option>
+            <option value="a">Link</option>
+            <option value="ul">Bullet List</option>
+            <option value="section">Section</option>
+          </select>
+        </li>
+      </ul>
 
-    <div>
-      <div ng-if="section.tag === 'h1' || section.tag === 'h2'">
-        <input type="text" placeholder="Text" ng-model="section.content" />
-        <input type="number" placeholder="Margin" ng-model="headerMargin" ng-change="section.style.margin = headerMargin + 'px'" />
-      </div>
-      <div ng-if="section.tag === 'hr'">
-        <input type="number" placeholder="Margin" ng-model="headerMargin" ng-change="section.style.margin = headerMargin + 'px'" />
-      </div>
-      <div ng-if="section.tag === 'p'">
-        <textarea ng-model="section.content"></textarea>
-      </div>
-      <div ng-if="section.tag === 'img'">
-        <input type="text" ng-model="section.attributes.src" placeholder="URL" />
-        <input type="number" placeholder="Width" step="1" ng-model="width" ng-change="section.style.width = width + 'px'" />
-      </div>
-      <div ng-if="section.tag === 'a'">
-        <input type="text" ng-model="section.attributes.href" placeholder="URL" />
-        <input type="text" ng-model="section.content" placeholder="Text" />
-      </div>
-      <div ng-if="section.tag === 'section'">
-        <custom-section ng-model="section"></custom-section>
-      </div>
+      <div>
+        <div ng-if="section.tag === 'h1' || section.tag === 'h2'">
+          <input type="text" placeholder="Text" ng-model="section.content" />
+          <input type="number" placeholder="Margin" ng-model="headerMargin" ng-change="section.style.margin = headerMargin + 'px'" />
+        </div>
+        <div ng-if="section.tag === 'hr'">
+          <input type="number" placeholder="Margin" ng-model="headerMargin" ng-change="section.style.margin = headerMargin + 'px'" />
+        </div>
+        <div ng-if="section.tag === 'p'">
+          <textarea ng-model="section.content"></textarea>
+        </div>
+        <div ng-if="section.tag === 'img'">
+          <input type="text" ng-model="section.attributes.src" placeholder="URL" />
+          <input type="number" placeholder="Width" step="1" ng-model="width" ng-change="section.style.width = width + 'px'" />
+        </div>
+        <div ng-if="section.tag === 'a'">
+          <input type="text" ng-model="section.attributes.href" placeholder="URL" />
+          <input type="text" ng-model="section.content" placeholder="Text" />
+        </div>
+        <div ng-if="section.tag === 'section'">
+          <custom-section ng-model="section"></custom-section>
+        </div>
 
-      <div ng-if="section.tag === 'ul'">
-        <input type="text" style="display: block; margin: 5px" ng-model="bullet.content" ng-repeat="bullet in section.content" style="" />
-        <input type="button" value="Add Bullet" ng-click="section.addItem('li')" />
+        <div ng-if="section.tag === 'ul'">
+          <input type="text" style="display: block; margin: 5px" ng-model="bullet.content" ng-repeat="bullet in section.content" style="" />
+          <input type="button" value="Add Bullet" ng-click="section.addItem('li')" />
+        </div>
       </div>
     </div>
+    <a ng-if="!$last" class="fa fa-plus" style="color: #39f; margin-bottom: 5px" ng-click="ngModel.addItem('h1', $index + 1)"></a>
   </div>
-  <input type="button" value="Add Item" style="margin-bottom: 20px" ng-click="ngModel.addItem('h1')" />
+  <a class="fa fa-plus" style="color: #39f; margin-bottom: 5px" ng-click="ngModel.addItem('h1')"></a>
 </section>
