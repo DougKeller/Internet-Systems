@@ -1,0 +1,71 @@
+html, body {
+  margin: 0px;
+  padding: 10px;
+  overflow-x: hidden;
+}
+body {
+  height: 100%;
+  font-family: 'Roboto', sans-serif;
+  color: #888;
+}
+h1 {
+  padding: 0px;
+  margin: 0px;
+  font-size: 4rem;
+}
+h2 {
+  font-size: 1.5rem;
+}
+
+input, select {
+  font-size: 1.1rem;
+  font-family: 'Pavanam', sans-serif;
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  height: 35px
+}
+
+input[type=button] {
+  background-color: #39f;
+  border: 1px solid #28e;
+  color: #fff;
+}
+
+input[type=color] {
+  width: 150px;
+}
+
+.section-builder {
+  margin-bottom: 5px;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: flex-start;
+}
+.section-builder :nth-child(1) {
+  margin-right: 5px;
+}
+.section-builder :last-child {
+  margin-right: 0px;
+}
+
+.custom-section {
+  margin: 15px;
+  margin-left: 30px;
+  border: 1px solid #ccc;
+  border-left: 5px solid #ccc;
+  transition: height 0.5s;
+}
+
+.section-ul {
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+}
+.section-ul li {
+  display: inline-block;
+}

@@ -1,10 +1,11 @@
 angular.module('pa3.factories').factory('CustomPageFactory', [
   function() {
-    var PageFactory = function() {
+    var PageFactory = function(options) {
       this.width = 800;
       this.height = 600;
       this.content = [];
       this.name = 'Custom Page';
+      angular.extend(this, options);
     }
 
     PageFactory.prototype.toHtmlString = function() {
@@ -32,10 +33,6 @@ angular.module('pa3.factories').factory('CustomPageFactory', [
       if (this.isOpen()) {
         this.openWindow.close();
       }
-    };
-
-    PageFactory.prototype.addItem = function(item) {
-      this.content.push(item);
     };
 
     return PageFactory;

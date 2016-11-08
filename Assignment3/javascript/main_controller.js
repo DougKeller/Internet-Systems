@@ -1,18 +1,52 @@
-angular.module('pa3.controllers').controller('MainController', ['$scope', 'CustomPageFactory', 'CustomContentFactory',
+angular.module('pa3.controllers').controller('MainController', ['$scope', 'CustomPageFactory', 'CustomSectionFactory',
   function($scope, CustomPageFactory, CustomContentFactory) {
-    var page = new CustomPageFactory();
-    $scope.customPage = page;
-
-    page.addItem(new CustomContentFactory({
-      tag: 'a',
+    var stylesheetLink = new CustomContentFactory({
+      tag: 'link',
       attributes: {
-        href: 'http://facebook.com'
-      },
-      content: [
-        'This is a link'
-      ]
-    }));
+        rel: 'stylesheet',
+        type: 'text/css',
+        href: 'https://fonts.googleapis.com/css?family=Cormorant+Garamond|Lato|Montserrat|Open+Sans|Oswald|Prociono|Raleway|Roboto:100|Shrikhand|Slabo+27px|Source+Sans+Pro'
+      }
+    });
 
-    console.log(page);
+    $scope.title = new CustomContentFactory({
+      tag: 'title',
+      content: 'My Awesome Profile!'
+    });
+
+    $scope.headerSection = new CustomContentFactory({
+      tag: 'head',
+      content: [
+        stylesheetLink,
+        $scope.title
+      ]
+    });
+
+    $scope.bodySection = new CustomContentFactory({
+      tag: 'body'
+    });
+
+    var pagePreview;
+    $scope.openPreview = function() {
+      if (pagePreview && pagePreview.isOpen()) {
+        pagePreview.close();
+      }
+
+      pagePreview = new CustomPageFactory({
+        name: $scope.title.content,
+        content: [
+          $scope.headerSection,
+          $scope.bodySection
+        ]
+      });
+
+      pagePreview.open();
+    }
+
+    $scope.closePreview = function() {
+      if (pagePreview && pagePreview.isOpen()) {
+        pagePreview.close();
+      }
+    };
   }
 ]);
