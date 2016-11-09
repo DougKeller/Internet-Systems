@@ -2,20 +2,13 @@
 <html>
 <head>
   <title>Doug Keller - Assignment 3</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
-  <script src="javascript/app.js"></script>
-  <script src="javascript/custom_page_factory.js"></script>
-  <script src="javascript/custom_section_factory.js"></script>
-  <script src="javascript/custom_section_directive.js"></script>
-  <script src="javascript/custom_style_directive.js"></script>
-  <script src="javascript/main_controller.js"></script>
   <link rel="stylesheet" type="text/css" href="application.css">
   <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
   <link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond|Lato|Montserrat|Open+Sans|Oswald|Pavanam|Prociono|Raleway|Roboto:100|Shrikhand|Slabo+27px|Source+Sans+Pro" rel="stylesheet">
 </head>
 <body ng-app="pa3" ng-controller="MainController">
   <center>
-    <h1>Personal Profile Creator</h1>
+    <h1>Profile Page Creator</h1>
     <ul class="section-ul">
       <li ng-if="!pagePreview || !pagePreview.isOpen()">
         <input type="button" value="Show Preview" ng-click="openPreview()" />
@@ -35,7 +28,7 @@
   <custom-section ng-model="bodySection"></custom-section>
 
   <h2 style="margin-top: 100px;">Elements Used in this Assignment</h2>
-    <div style="margin-left: 40px; display: flex; justify-content: space-around;">
+    <div style="display: flex; justify-content: space-around;">
       <div>
         <h3>HTML</h3>
         <ul style="font-family: monospace;">
@@ -59,7 +52,7 @@
           <li>margin</li>
           <li>padding</li>
           <li>border</li>
-          <li>display (inline-block, flex, none)</li>
+          <li>display</li>
           <li>transition</li>
           <li>background</li>
           <li>color</li>
@@ -95,6 +88,14 @@
         </ul>
       </div>
     </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+    <script src="javascript/app.js"></script>
+    <script src="javascript/custom_page_factory.js"></script>
+    <script src="javascript/custom_section_factory.js"></script>
+    <script src="javascript/custom_section_directive.js"></script>
+    <script src="javascript/custom_style_directive.js"></script>
+    <script src="javascript/main_controller.js"></script>
 </body>
 </html>
 

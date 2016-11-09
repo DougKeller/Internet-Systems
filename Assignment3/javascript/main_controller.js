@@ -5,7 +5,7 @@ angular.module('pa3.controllers').controller('MainController', ['$scope', 'Custo
       attributes: {
         rel: 'stylesheet',
         type: 'text/css',
-        href: 'https://fonts.googleapis.com/css?family=Cormorant+Garamond|Lato|Montserrat|Open+Sans|Oswald|Prociono|Raleway|Roboto:100|Shrikhand|Slabo+27px|Source+Sans+Pro'
+        href: 'https://fonts.googleapis.com/css?family=Cormorant+Garamond|Lato|Montserrat|Open+Sans|Oswald|Prociono|Raleway|Roboto:100|Shrikhand|Source+Sans+Pro'
       }
     });
 
@@ -29,7 +29,7 @@ angular.module('pa3.controllers').controller('MainController', ['$scope', 'Custo
     $scope.pagePreview;
     $scope.openPreview = function() {
       if ($scope.pagePreview && $scope.pagePreview.isOpen()) {
-        $scope.pagePreview.close();
+        $scope.closePreview();
       }
 
       $scope.pagePreview = new CustomPageFactory({
@@ -41,12 +41,14 @@ angular.module('pa3.controllers').controller('MainController', ['$scope', 'Custo
       });
 
       $scope.pagePreview.open();
+      console.log($scope.pagePreview);
     }
 
     $scope.closePreview = function() {
       if ($scope.pagePreview && $scope.pagePreview.isOpen()) {
         $scope.pagePreview.close();
       }
+      $scope.pagePreview = undefined;
     };
   }
 ]);

@@ -18,7 +18,10 @@ angular.module('pa3.factories').factory('CustomPageFactory', [
     };
 
     PageFactory.prototype.isOpen = function() {
-      return this.openWindow !== undefined;
+      if (this.openWindow && this.openWindow.closed) {
+        this.close();
+      }
+      return this.openWindow && !this.openWindow.closed;
     };
 
     PageFactory.prototype.open = function() {
@@ -30,9 +33,10 @@ angular.module('pa3.factories').factory('CustomPageFactory', [
     };
 
     PageFactory.prototype.close = function() {
-      if (this.isOpen()) {
+      if (this.openWindow) {
         this.openWindow.close();
       }
+      this.openWindow = undefined;
     };
 
     return PageFactory;

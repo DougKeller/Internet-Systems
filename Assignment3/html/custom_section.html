@@ -1,6 +1,6 @@
 <section class="custom-section" style="{{ sectionModel.styleString() }}; padding-right: 0px">
 
-  <custom-style ng-model="sectionModel.style"></custom-style>
+  <custom-style ng-model="sectionModel.style" section="sectionModel"></custom-style>
 
   <div ng-repeat="section in sectionModel.content">
     <a ng-if="$first" class="fa fa-plus" style="color: #39f; margin-bottom: 5px" ng-click="sectionModel.addItem('h1', 0)"></a>
@@ -48,7 +48,6 @@
         <input type="text" style="display: block; margin: 5px" ng-model="bullet.content" ng-repeat="bullet in section.content" style="" />
         <input type="button" value="Add Bullet" ng-click="section.addItem('li')" />
       </div>
-
     </div>
     <a ng-if="!$last" class="fa fa-plus" style="color: #39f; margin-bottom: 5px" ng-click="sectionModel.addItem('h1', $index + 1)"></a>
   </div>

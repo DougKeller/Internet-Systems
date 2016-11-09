@@ -3,7 +3,8 @@ angular.module('pa3.directives').directive('customStyle', [
     return {
       restrict: 'E',
       scope: {
-        style: '=ngModel'
+        style: '=ngModel',
+        section: '=section'
       },
       templateUrl: 'html/custom_style.html',
       link: function(scope) {
@@ -13,12 +14,10 @@ angular.module('pa3.directives').directive('customStyle', [
           'Montserrat',
           'Open Sans',
           'Oswald',
-          'Pavanam',
           'Prociono',
           'Raleway',
           'Roboto',
           'Shrikhand',
-          'Slabo 27px',
           'Source Sans Pro'
         ];
 
@@ -37,6 +36,12 @@ angular.module('pa3.directives').directive('customStyle', [
         scope.fontWeights = [
           'Normal',
           'Bold'
+        ];
+
+        scope.backgroundPositions = [
+          'Left',
+          'Center',
+          'Right'
         ];
       }
     };

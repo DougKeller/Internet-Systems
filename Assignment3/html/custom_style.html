@@ -1,9 +1,9 @@
 <div class="style-options">
-  <div class="options-head" ng-click="options.open = !options.open" ng-init="options = { open: false }">
+  <div ng-click="options.open = !options.open" ng-init="options = { open: false }">
     Style Options
     <i class="fa" ng-class="{ 'fa-chevron-down': options.open, 'fa-chevron-right': !options.open }"></i>
   </div>
-  <form class="options-body" ng-class="{ 'options-body-closed': !options.open, 'options-body-open': options.open }">
+  <form class="options-body" ng-class="{ 'options-body-closed': !options.open }">
     <ul class="section-ul">
       <li>Background</li>
       <li>
@@ -17,13 +17,26 @@
         <input type="color" ng-model="style.background" ng-init="style.background = '#EEEEEE'"/>
       </li>
       <li ng-if="backgroundType === 'image'">
-        <input type="text" placeholder="URL" ng-model="url" ng-change="style.background = 'url(' + url + ')'" />
+        <input type="text" placeholder="URL" ng-model="url" ng-change="style['background-image'] = 'url(' + url + ')'" />
       </li>
       <li ng-if="backgroundType === 'image'">
         <input type="number" step="1" min="1" placeholder="Width" ng-model="width" ng-change="style['background-size'] = width + 'px'" />
       </li>
       <li ng-if="backgroundType === 'image'">
-        <select ng-model="style['background-repeat']"" ng-init="style['background-repeat'] = 'repeat'">
+        <select ng-model="style['background-position']" ng-init="style['background-position'] = 'center'">
+          <option value="left top">Top Left</option>
+          <option value="center top">Top Middle</option>
+          <option value="right top">Top Right</option>
+          <option value="left">Middle Left</option>
+          <option value="center">Middle</option>
+          <option value="right">Middle Right</option>
+          <option value="left bottom">Bottom Left</option>
+          <option value="center bottom">Bottom Middle</option>
+          <option value="right bottom">Bottom Right</option>
+        </select>
+      </li>
+      <li ng-if="backgroundType === 'image'">
+        <select ng-model="style['background-repeat']" ng-init="style['background-repeat'] = 'no-repeat'">
           <option value="repeat">Repeat</option>
           <option value="no-repeat">Don't Repeat</option>
         </select>
@@ -44,7 +57,7 @@
     <ul class="section-ul">
       <li>Centered</li>
       <li>
-        <input type="checkbox" ng-model="ngModel.centered" />
+        <input type="checkbox" ng-model="section.centered" />
       </li>
     </ul>
     <ul class="section-ul">
