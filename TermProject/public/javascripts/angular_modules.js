@@ -1,1 +1,1 @@
-angular.module('calendar.js', []);
+angular.module('calendar.io', []);
