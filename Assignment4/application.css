@@ -22,6 +22,11 @@ th {
   padding: 10px;
 }
 
+ul {
+  text-align: left;
+  display: inline-block;
+}
+
 .success {
   color: green;
 }
