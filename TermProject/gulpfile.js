@@ -5,7 +5,7 @@ var uglify = require('gulp-uglify');
 var vendorPath = './client/bower_components/';
 var scriptPath = './client/javascripts/';
 
-gulp.task('generateScripts', function() {
+gulp.task('build', function() {
   var scriptDependencies = [
     vendorPath + 'angular/angular.js',
     scriptPath + 'angular_modules.js',

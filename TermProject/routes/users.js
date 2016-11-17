@@ -4,7 +4,10 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 
-router.get('/', function(request, response, next) {
+var authenticate = require('express-jwt')({ secret: process.env.JWT_SECRET, userProperty: 'userToken' });
+
+
+router.get('/', authenticate, function(request, response, next) {
   User.find(function(error, users) {
     if (error) {
       return next(error);

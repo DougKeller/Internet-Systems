@@ -1,8 +1,9 @@
 var app = require('../app');
 
 var routes = [
-  { path: 'index', url: '/' },
-  { path: 'users', url: '/users' }
+  { path: 'index',          url: '/'      },
+  { path: 'authentication', url: '/auth'   },
+  { path: 'users',          url: '/users' }
 ];
 
 routes.forEach(function(route) {
@@ -13,19 +14,19 @@ routes.forEach(function(route) {
 });
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+app.use(function(_request, _response, next) {
+  var error = new Error('Not Found');
+  error.status = 404;
+  next(error);
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function(error, request, response, next) {
   // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  response.locals.message = error.message;
+  response.locals.error = request.app.get('env') === 'development' ? error : {};
 
   // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+  response.status(error.status || 500);
+  response.render('error');
 });
