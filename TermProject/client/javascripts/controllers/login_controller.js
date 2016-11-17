@@ -1,19 +1,19 @@
-angular.module('calendar').controller('LoginController', ['$scope', '$http',
-  function($scope, $http) {
-    $scope.foo = 'bar';
+angular.module('calendar').controller('LoginController', ['$scope', '$http', '$state',
+  function($scope, $http, $state) {
+    $scope.user = {};
+
+    var existingToken = localStorage.getItem('userToken');
+    if (existingToken) {
+      $state.go('calendar');
+    }
 
     $scope.login = function() {
-      console.log('logging in');
+      $http.post('/auth/login', $scope.user).then(function(response) {
+        localStorage.setItem('userToken', response.data.token);
 
-      var loginParams = {
-        email: $scope.email,
-        password: $scope.password
-      };
-
-      $http.post('/login', loginParams).then(function(response) {
-        console.log(response);
+        $state.go('calendar');
       }, function(error) {
-        console.log('Error:', error);
+        $scope.error = error.data.message;
       });
     };
   }

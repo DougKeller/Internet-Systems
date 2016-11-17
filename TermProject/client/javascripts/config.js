@@ -5,6 +5,7 @@ angular.module('calendar').config(['$stateProvider', '$urlRouterProvider', 'jwtI
       return localStorage.getItem('userToken');
     }];
     $httpProvider.interceptors.push('jwtInterceptor');
+    $httpProvider.interceptors.push('AuthenticationInterceptor');
 
     $urlRouterProvider.otherwise('/');
 
@@ -13,5 +14,19 @@ angular.module('calendar').config(['$stateProvider', '$urlRouterProvider', 'jwtI
       controller: 'LoginController',
       templateUrl: 'templates/login.html'
     });
+    $stateProvider.state('register', {
+      url: '/register',
+      controller: 'RegisterController',
+      templateUrl: 'templates/register.html'
+    });
+    $stateProvider.state('calendar', {
+      url: '/',
+      controller: 'CalendarController',
+      templateUrl: 'templates/calendar.html'
+    });
   }
-]);
+]).run(['$rootScope', '$state', function($rootScope, $state) {
+  $rootScope.$on('NotAuthorized', function() {
+    $state.go('login');
+  });
+}]);

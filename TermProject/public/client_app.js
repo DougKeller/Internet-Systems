@@ -36779,6 +36779,7 @@ angular.module('calendar').config(['$stateProvider', '$urlRouterProvider', 'jwtI
       return localStorage.getItem('userToken');
     }];
     $httpProvider.interceptors.push('jwtInterceptor');
+    $httpProvider.interceptors.push('AuthenticationInterceptor');
 
     $urlRouterProvider.otherwise('/');
 
@@ -36787,26 +36788,73 @@ angular.module('calendar').config(['$stateProvider', '$urlRouterProvider', 'jwtI
       controller: 'LoginController',
       templateUrl: 'templates/login.html'
     });
+    $stateProvider.state('register', {
+      url: '/register',
+      controller: 'RegisterController',
+      templateUrl: 'templates/register.html'
+    });
+    $stateProvider.state('calendar', {
+      url: '/',
+      controller: 'CalendarController',
+      templateUrl: 'templates/calendar.html'
+    });
+  }
+]).run(['$rootScope', '$state', function($rootScope, $state) {
+  $rootScope.$on('NotAuthorized', function() {
+    $state.go('login');
+  });
+}]);
+
+angular.module('calendar').controller('CalendarController', ['$scope',
+  function($scope) {
+    $scope.message = 'Welcome!';
   }
 ]);
+angular.module('calendar').controller('LoginController', ['$scope', '$http', '$state',
+  function($scope, $http, $state) {
+    $scope.user = {};
 
-angular.module('calendar').controller('LoginController', ['$scope', '$http',
-  function($scope, $http) {
-    $scope.foo = 'bar';
+    var existingToken = localStorage.getItem('userToken');
+    if (existingToken) {
+      $state.go('calendar');
+    }
 
     $scope.login = function() {
-      console.log('logging in');
+      $http.post('/auth/login', $scope.user).then(function(response) {
+        localStorage.setItem('userToken', response.data.token);
 
-      var loginParams = {
-        email: $scope.email,
-        password: $scope.password
-      };
-
-      $http.post('/login', loginParams).then(function(response) {
-        console.log(response);
+        $state.go('calendar');
       }, function(error) {
-        console.log('Error:', error);
+        $scope.error = error.data.message;
       });
+    };
+  }
+]);
+angular.module('calendar').controller('RegisterController', ['$scope', '$state', '$http',
+  function($scope, $state, $http) {
+    $scope.user = {};
+
+    $scope.register = function() {
+      $http.post('/auth/register', $scope.user).then(function(response) {
+        $state.go('login');
+      }, function(error) {
+        $scope.error = error.data.message;
+      });
+    };
+  }
+]);
+angular.module('calendar').factory('UserFactory', function() {
+});
+angular.module('calendar').factory('AuthenticationInterceptor', ['$q', '$rootScope',
+  function($q, $rootScope) {
+    return {
+      responseError: function(response) {
+        var matchesAuthenticatePath = response.config && response.config.url.match(new RegExp('/auth/login'));
+        if (!matchesAuthenticatePath && response.status === 401) {
+          $rootScope.$broadcast('NotAuthorized');
+        }
+        return $q.reject(response);
+      }
     };
   }
 ]);

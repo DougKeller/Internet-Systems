@@ -1,6 +1,14 @@
 <h1>Login</h1>
-{{ foo }}
-<label>Email</label>
-<input type="text" ng-model="email" placeholder="john@gmail.com" />
-<label>Password</label>
-<input type="password" ng-model="password" />
+
+<form ng-submit="login()">
+  <label>Email</label>
+  <input type="text" ng-model="user.email" />
+  <label>Password</label>
+  <input type="password" ng-model="user.password" />
+
+  <input type="submit" value="Login" />
+  - or -
+  <a ui-sref="register">Sign Up!</a>
+
+  {{ error }}
+</form>

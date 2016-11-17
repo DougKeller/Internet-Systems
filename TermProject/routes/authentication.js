@@ -1,11 +1,12 @@
 var express = require('express');
+var passport = require('passport');
 var router = express.Router();
 
 var jwt = require('jsonwebtoken');
 var User = require('mongoose').model('User');
 
-router.post('/login', function(request, response, next){
-  if (!request.body.email || !request.body.password){
+router.post('/login', function(request, response, next) {
+  if (!request.body.email || !request.body.password) {
     return response.status(400).json({
       message: 'Invalid Login'
     });
@@ -28,26 +29,37 @@ router.post('/login', function(request, response, next){
   authenticate(request, response, next);
 });
 
-router.post('/signup', function(request, response, next){
+router.post('/register', function(request, response, next){
   if (!request.body.email || !request.body.password) {
     return response.status(400).json({
       message: 'Please fill out all fields'
     });
   }
 
-  var user = new User();
-  user.email = request.body.email;
-  user.setPassword(request.body.password);
+  User.findOne({ email: request.body.email }, function(error, user) {
+    if (user) {
+      return response.status(422).json({
+        message: 'This email address is already in use.'
+      });
+    } else {
+      user = new User();
+      user.firstName = request.body.firstName;
+      user.lastName = request.body.lastName;
+      user.email = request.body.email;
+      user.setPassword(request.body.password);
 
-  user.save(function(error) {
-    if (error) {
-      return next(error);
+      user.save(function(error) {
+        if (error) {
+          return next(error);
+        }
+
+        return response.json({
+          token: user.generateJWT()
+        });
+      });
     }
-
-    return response.json({
-      token: user.generateJWT()
-    });
   });
+
 });
 
 module.exports = router;
