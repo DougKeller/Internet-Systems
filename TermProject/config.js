@@ -1,9 +1,5 @@
-var dependencyPaths = [
-  './config/views',
-  './config/database',
-  './config/routes',
-  './config/logger',
-  './config/parsers'
-];
-
-dependencyPaths.forEach(path => require(path));
+require('./config/views')
+require('./config/database')
+require('./config/routes')
+require('./config/logger')
+require('./config/parsers')

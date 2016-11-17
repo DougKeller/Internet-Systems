@@ -1,6 +1,4 @@
 var app = require('../app');
-var favicon = require('serve-favicon');
-var express = require('express');
 
 var routes = [
   { path: 'index', url: '/' },
@@ -13,10 +11,6 @@ routes.forEach(function(route) {
 
   app.use(route.url, routeHandler);
 });
-
-// uncomment after placing your favicon in /public
-app.use(favicon('./public/favicon.ico'));
-app.use(express.static('./public'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
