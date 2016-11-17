@@ -2,8 +2,8 @@ var gulp = require('gulp');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 
-var vendorPath = './public/bower_components/';
-var scriptPath = './public/javascripts/';
+var vendorPath = './client/bower_components/';
+var scriptPath = './client/javascripts/';
 
 gulp.task('generateScripts', function() {
   var scriptDependencies = [
