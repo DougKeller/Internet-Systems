@@ -1,1 +1,4 @@
-angular.module('calendar.io', []);
+angular.module('calendar', [
+  'angular-jwt',
+  'ui.router'
+]);
