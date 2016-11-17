@@ -31,10 +31,29 @@ UserSchema.methods.generateJWT = function() {
   expires.setDate(today.getDate() + days);
 
   return jwt.sign({
-    _id: this._id,
+    id: this._id,
     email: this.email,
     expires: parseInt(expires.getTime() / 1000),
   }, process.env.JWT_SECRET);
 };
+
+UserSchema.virtual('name').get(function() {
+  if (this.firstName && this.lastName) {
+    return this.firstName + ' ' + this.lastName;
+  } else {
+    return this.firstName || this.lastName;
+  }
+});
+
+UserSchema.set('toJSON', {
+  virtuals: true,
+  transform: function(_doc, user, _options) {
+    user.id = user._id;
+    delete user._id;
+    delete user.__v;
+    delete user.passwordHash;
+    delete user.salt;
+  }
+});
 
 mongoose.model('User', UserSchema);

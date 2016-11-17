@@ -1,4 +1,5 @@
 angular.module('calendar', [
   'angular-jwt',
-  'ui.router'
+  'ui.router',
+  'angularMoment'
 ]);

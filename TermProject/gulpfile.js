@@ -10,6 +10,8 @@ gulp.task('build', function() {
     vendorPath + 'angular/angular.js',
     vendorPath + 'angular-jwt/dist/angular-jwt.js',
     vendorPath + 'angular-ui-router/release/angular-ui-router.js',
+    vendorPath + 'moment/moment.js',
+    vendorPath + 'angular-moment/angular-moment.js',
     scriptPath + 'angular_modules.js',
     scriptPath + '*.js',
     scriptPath + '**/*.js'

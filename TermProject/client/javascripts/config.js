@@ -12,14 +12,33 @@ angular.module('calendar').config(['$stateProvider', '$urlRouterProvider', 'jwtI
     $stateProvider.state('login', {
       url: '/login',
       controller: 'LoginController',
-      templateUrl: 'templates/login.html'
+      templateUrl: 'templates/login.html',
     });
     $stateProvider.state('register', {
       url: '/register',
       controller: 'RegisterController',
       templateUrl: 'templates/register.html'
     });
-    $stateProvider.state('calendar', {
+
+    $stateProvider.state('a', {
+      abstract: true,
+      template: '<ui-view></ui-view>',
+      resolve: {
+        currentUser: function(UserFactory, $q) {
+          var deferred = $q.defer();
+
+          UserFactory.loadCurrentUser().then(function(user) {
+            deferred.resolve(user);
+          }, function() {
+            $state.go('login');
+            deferred.reject();
+          });
+
+          return deferred.promise;
+        }
+      }
+    });
+    $stateProvider.state('a.calendar', {
       url: '/',
       controller: 'CalendarController',
       templateUrl: 'templates/calendar.html'

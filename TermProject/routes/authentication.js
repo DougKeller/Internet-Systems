@@ -59,7 +59,6 @@ router.post('/register', function(request, response, next){
       });
     }
   });
-
 });
 
 module.exports = router;
