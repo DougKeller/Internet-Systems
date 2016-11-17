@@ -61,7 +61,6 @@ input[type=color] {
 
 .custom-section-child {
   display: inline-block;
-  flex-basis: 80%;
 }
 
 .custom-section-child:nth-child(1) {
