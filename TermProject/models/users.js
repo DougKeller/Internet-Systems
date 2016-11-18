@@ -6,7 +6,7 @@ var jwt = require('jsonwebtoken');
 var UserSchema = new Schema({
   firstName: String,
   lastName: String,
-  email: { type: String, lowercase: true, unique: true },
+  username: { type: String, lowercase: true, unique: true },
   passwordHash: String,
   salt: String
 });
@@ -33,7 +33,7 @@ UserSchema.methods.generateJWT = function() {
 
   return jwt.sign({
     id: this._id,
-    email: this.email,
+    username: this.username,
     name: this.name,
     expires: parseInt(expires.getTime() / 1000),
   }, process.env.JWT_SECRET);

@@ -17,7 +17,6 @@ angular.module('calendar').controller('NavigationController', ['$scope', '$state
     };
 
     $scope.currentUserName = function() {
-      console.log(decodedToken());
       if ($scope.isLoggedIn()) {
         return decodedToken().name;
       }

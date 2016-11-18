@@ -1,3 +1,11 @@
-<div ng-if="notification" uib-alert ng-class="'alert-' + notification.type" dismiss-on-timeout="4000" close="closeNotification()">
-  <strong>{{ notification.title }}</strong> {{ notification.message }}
+<div class="notification-wrapper">
+  <div class="container">
+    <div class="row">
+      <div class="notification col-md-4 col-md-offset-4 bg-success" ng-class="{ active: notification }">
+        <span class="text-success">
+          <strong>{{ notification.title }}</strong> {{ notification.message }}
+        </span>
+      </div>
+    </div>
+  </div>
 </div>

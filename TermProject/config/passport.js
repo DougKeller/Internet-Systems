@@ -3,14 +3,13 @@ var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 
-var passportConfig = {
-  usernameField: 'email'
-};
+// var passportConfig = {
+//   usernameField: 'username'
+// };
 
 passport.use(new LocalStrategy(
-  passportConfig,
-  function(email, password, done) {
-    User.findOne({ email: email }, function (error, user) {
+  function(username, password, done) {
+    User.findOne({ username: username }, function (error, user) {
       if (error) {
         return done(error);
       }

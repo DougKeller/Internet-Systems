@@ -1,11 +1,10 @@
 angular.module('calendar').controller('CalendarController', ['$scope', '$interval', '$state', 'EventFactory', 'currentUser', 'moment', 'NotificationService',
   function($scope, $interval, $state, EventFactory, currentUser, moment, NotificationService) {
 
-    NotificationService.success('Hello!');
+    NotificationService.success(currentUser.name + '!', 'Welcome back,');
 
     var loadEvents = function() {
       EventFactory.query().then(function(events) {
-        console.log(events);
         $scope.events = events;
       });
     };

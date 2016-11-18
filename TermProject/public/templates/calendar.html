@@ -1,37 +1,48 @@
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-8 col-md-offset-2">
-      <table class="table">
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <table class="table">
+      <thead>
         <tr>
           <th>Title</th>
         </tr>
+      </thead>
+      <tbody>
         <tr ng-repeat="event in events">
           <td>{{ event.title }}</td>
         </tr>
-      </table>
-    </div>
+      </tbody>
+    </table>
   </div>
+</div>
 
-  <div class="row">
-    <div class="container-fluid">
-      <div class="row col-md-8 col-md-offset-2">
-        <form ng-submit="saveEvent()" ng-if="newEvent" class="col-md-4 col-md-offset-4">
-          <label>Title</label>
-          <input type="text" ng-model="newEvent.title" />
-          <label>Start</label>
-          <input type="date" ng-max="newEvent.endTime" ng-model="newEvent.startTime" />
-          <label>End</label>
-          <input type="date" ng-min="newEvent.startTime" ng-model="newEvent.endTime" />
-
-          <input class="form-control btn btn-primary" type="submit" value="Save" />
+<div class="row">
+  <div class="container">
+    <div class="row">
+      <div class="well well-lg col-md-4 col-md-offset-4" ng-if="newEvent">
+        <form ng-submit="saveEvent()"">
+          <div class="form-group">
+            <label class="control-label">Title</label>
+            <input type="text" class="form-control" ng-model="newEvent.title" />
+          </div>
+          <div class="form-group">
+            <label class="control-label">Start</label>
+            <input type="date" class="form-control" ng-max="newEvent.endTime" ng-model="newEvent.startTime" />
+          </div>
+          <div class="form-group">
+            <label class="control-label">End</label>
+            <input type="date" class="form-control" ng-min="newEvent.startTime" ng-model="newEvent.endTime" />
+          </div>
+          <div class="form-group">
+            <input class="form-control btn btn-primary" type="submit" value="Save" />
+          </div>
         </form>
       </div>
-      <div class="row text-center">
-        <input type="button" class="btn btn-primary" ng-if="!newEvent" value="Create New Event" ng-click="addNewEvent()" />
-      </div>
-      <div class="row text-center">
-        <input type="button" class="btn btn-default" ng-if="newEvent"  value="Cancel" ng-click="cancelNewEvent()" />
-      </div>
+    </div>
+    <div class="row text-center">
+      <input type="button" class="btn btn-primary" ng-if="!newEvent" value="Create New Event" ng-click="addNewEvent()" />
+    </div>
+    <div class="row text-center">
+      <input type="button" class="btn btn-default" ng-if="newEvent"  value="Cancel" ng-click="cancelNewEvent()" />
     </div>
   </div>
 </div>

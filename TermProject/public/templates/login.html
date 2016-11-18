@@ -5,11 +5,11 @@
 <div class="well well-lg row col-md-4 col-md-offset-4">
   <form ng-submit="login()">
     <div class="form-group">
-      <div ng-if="error" uib-alert class="alert-danger fade in">{{ error }}</div>
+      <div ng-if="error" uib-alert class="alert-danger text- dngdffade in">{{ error }}</div>
     </div>
     <div class="form-group">
-      <label>Email</label>
-      <input class="form-control" name="email" type="text" ng-model="user.email" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+      <label>Username</label>
+      <input class="form-control" name="username" type="text" ng-model="user.username" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
     </div>
     <div class="form-group">
       <label>Password</label>
@@ -23,5 +23,4 @@
       <a ui-sref="root.register">Create an Account</a>
     </div>
   </form>
-
 </div>

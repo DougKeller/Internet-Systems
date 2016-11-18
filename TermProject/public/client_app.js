@@ -53649,11 +53649,10 @@ angular.module('calendar').config(['$stateProvider', '$urlRouterProvider', 'jwtI
 angular.module('calendar').controller('CalendarController', ['$scope', '$interval', '$state', 'EventFactory', 'currentUser', 'moment', 'NotificationService',
   function($scope, $interval, $state, EventFactory, currentUser, moment, NotificationService) {
 
-    NotificationService.success('Hello!');
+    NotificationService.success(currentUser.name + '!', 'Welcome back,');
 
     var loadEvents = function() {
       EventFactory.query().then(function(events) {
-        console.log(events);
         $scope.events = events;
       });
     };
@@ -53715,7 +53714,6 @@ angular.module('calendar').controller('NavigationController', ['$scope', '$state
     };
 
     $scope.currentUserName = function() {
-      console.log(decodedToken());
       if ($scope.isLoggedIn()) {
         return decodedToken().name;
       }
@@ -53746,20 +53744,6 @@ angular.module('calendar').controller('RegisterController', ['$scope', '$state',
     };
   }
 ]);
-angular.module('calendar').factory('AuthenticationInterceptor', ['$q', '$rootScope',
-  function($q, $rootScope) {
-    return {
-      responseError: function(response) {
-        var matchesAuthenticatePath = response.config && response.config.url.match(new RegExp('/auth/login'));
-        if (!matchesAuthenticatePath && response.status === 401) {
-          $rootScope.$broadcast('NotAuthorized');
-        }
-        return $q.reject(response);
-      }
-    };
-  }
-]);
-
 angular.module('calendar').factory('EventFactory', ['$http', '$q',
   function($http, $q, jwtHelper) {
     function Event(data) {
@@ -53837,14 +53821,29 @@ angular.module('calendar').factory('UserFactory', ['$http', '$q', 'jwtHelper',
     return User;
   }
 ]);
-angular.module('calendar').service('NotificationService', ['$rootScope',
-  function($rootScope) {
+angular.module('calendar').factory('AuthenticationInterceptor', ['$q', '$rootScope',
+  function($q, $rootScope) {
+    return {
+      responseError: function(response) {
+        var matchesAuthenticatePath = response.config && response.config.url.match(new RegExp('/auth/login'));
+        if (!matchesAuthenticatePath && response.status === 401) {
+          $rootScope.$broadcast('NotAuthorized');
+        }
+        return $q.reject(response);
+      }
+    };
+  }
+]);
+
+angular.module('calendar').service('NotificationService', ['$rootScope', '$timeout',
+  function($rootScope, $timeout) {
     var showNotification = function(message, title, type) {
       $rootScope.notification = {
         message: message,
         title: title,
         type: type
       };
+      $timeout($rootScope.closeNotification, 3000);
     };
 
     this.success = function(message, title) {
@@ -53861,6 +53860,7 @@ angular.module('calendar').service('NotificationService', ['$rootScope',
     };
 
     $rootScope.closeNotification = function() {
+      console.log('removed');
       delete $rootScope.notification;
     };
   }
