@@ -7,7 +7,7 @@ angular.module('calendar').config(['$stateProvider', '$urlRouterProvider', 'jwtI
     $httpProvider.interceptors.push('jwtInterceptor');
     $httpProvider.interceptors.push('AuthenticationInterceptor');
 
-    $urlRouterProvider.otherwise('/');
+    $urlRouterProvider.otherwise('/login');
 
     $stateProvider.state('root', {
       abstract: true,
@@ -26,17 +26,20 @@ angular.module('calendar').config(['$stateProvider', '$urlRouterProvider', 'jwtI
     });
     $stateProvider.state('root.login', {
       url: '/login',
+      parent: 'root',
       controller: 'LoginController',
       templateUrl: 'templates/login.html',
     });
     $stateProvider.state('root.register', {
       url: '/register',
+      parent: 'root',
       controller: 'RegisterController',
       templateUrl: 'templates/register.html'
     });
 
     $stateProvider.state('root.authenticated', {
       abstract: true,
+      parent: 'root',
       template: '<ui-view></ui-view>',
       resolve: {
         currentUser: function(UserFactory, $q) {
@@ -55,12 +58,13 @@ angular.module('calendar').config(['$stateProvider', '$urlRouterProvider', 'jwtI
     });
     $stateProvider.state('root.authenticated.calendar', {
       url: '/',
+      parent: 'root.authenticated',
       controller: 'CalendarController',
       templateUrl: 'templates/calendar.html'
     });
   }
 ]).run(['$rootScope', '$state', function($rootScope, $state) {
   $rootScope.$on('NotAuthorized', function() {
-    $state.go('login');
+    $state.go('root.login');
   });
 }]);

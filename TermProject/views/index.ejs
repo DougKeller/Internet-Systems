@@ -11,11 +11,11 @@
     <script src="client_app.js"></script>
   </head>
   <body class="container" ng-app="calendar">
-    <nav ui-view="navigation"></nav>
-    <div ui-view="notification"></div>
-    <div ui-view="content"></div>
+    <div class="row" ui-view="navigation"></div>
+    <div class="row" ui-view="notification"></div>
+    <div class="row" ui-view="content"></div>
 
-    <div class="footer text-center">
+    <div class="footer row text-center">
       <small>&copy; Doug Keller, 2016</small>
     </div>
   </body>
