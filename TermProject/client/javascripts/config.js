@@ -9,18 +9,33 @@ angular.module('calendar').config(['$stateProvider', '$urlRouterProvider', 'jwtI
 
     $urlRouterProvider.otherwise('/');
 
-    $stateProvider.state('login', {
+    $stateProvider.state('root', {
+      abstract: true,
+      views: {
+        notification: {
+          templateUrl: 'templates/notification.html'
+        },
+        navigation: {
+          controller: 'NavigationController',
+          templateUrl: 'templates/navigation.html'
+        },
+        content: {
+          template: '<ui-view></ui-view>'
+        }
+      }
+    });
+    $stateProvider.state('root.login', {
       url: '/login',
       controller: 'LoginController',
       templateUrl: 'templates/login.html',
     });
-    $stateProvider.state('register', {
+    $stateProvider.state('root.register', {
       url: '/register',
       controller: 'RegisterController',
       templateUrl: 'templates/register.html'
     });
 
-    $stateProvider.state('a', {
+    $stateProvider.state('root.authenticated', {
       abstract: true,
       template: '<ui-view></ui-view>',
       resolve: {
@@ -30,7 +45,7 @@ angular.module('calendar').config(['$stateProvider', '$urlRouterProvider', 'jwtI
           UserFactory.loadCurrentUser().then(function(user) {
             deferred.resolve(user);
           }, function() {
-            $state.go('login');
+            $state.go('root.login');
             deferred.reject();
           });
 
@@ -38,7 +53,7 @@ angular.module('calendar').config(['$stateProvider', '$urlRouterProvider', 'jwtI
         }
       }
     });
-    $stateProvider.state('a.calendar', {
+    $stateProvider.state('root.authenticated.calendar', {
       url: '/',
       controller: 'CalendarController',
       templateUrl: 'templates/calendar.html'

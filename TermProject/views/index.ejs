@@ -2,11 +2,21 @@
 <html>
   <head>
     <title><%= title %></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel="stylesheet" href="stylesheets/style.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+
     <script src="client_app.js"></script>
   </head>
-  <body ng-app="calendar">
-    <ui-view></ui-view>
+  <body class="container" ng-app="calendar">
+    <nav ui-view="navigation"></nav>
+    <div ui-view="notification"></div>
+    <div ui-view="content"></div>
+
+    <div class="footer text-center">
+      <small>&copy; Doug Keller, 2016</small>
+    </div>
   </body>
 </html>

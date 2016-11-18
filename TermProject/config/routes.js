@@ -2,12 +2,13 @@ var app = require('../app');
 
 var routes = [
   { path: 'index',          url: '/'      },
-  { path: 'authentication', url: '/auth'   },
-  { path: 'users',          url: '/users' }
+  { path: 'authentication', url: '/auth'  },
+  { path: 'users',          url: '/users' },
+  { path: 'events',         url: '/events'}
 ];
 
 routes.forEach(function(route) {
-  var fullPath = '../routes/' +  route.path;
+  var fullPath = '../routes/' + route.path;
   var routeHandler = require(fullPath)
 
   app.use(route.url, routeHandler);

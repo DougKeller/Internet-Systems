@@ -1,5 +1,7 @@
 angular.module('calendar', [
+  'ngAnimate',
   'angular-jwt',
   'ui.router',
-  'angularMoment'
+  'angularMoment',
+  'ui.bootstrap'
 ]);

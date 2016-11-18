@@ -1,0 +1,26 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" ng-click="isNavCollapsed = !isNavCollapsed">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">calendar.io</a>
+    </div>
+    <div class="collapse navbar-collapse" uib-collapse="isNavCollapsed">
+      <ul class="nav navbar-nav" ng-if="isLoggedIn()">
+        <li ui-sref-active="active"><a ui-sref="root.authenticated.calendar">Daily</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right" ng-if="!isLoggedIn()">
+        <li><a ui-sref="root.register"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+        <li><a ui-sref="root.login"><span class="glyphicon glyphicon-log-in"></span> Sign In</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right" ng-if="isLoggedIn()">
+        <li><a><span class="glyphicon glyphicon-user"></span> {{ currentUserName() }}</a></li>
+        <li><a ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> Sign Out</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>

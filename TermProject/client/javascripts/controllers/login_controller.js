@@ -8,7 +8,7 @@ angular.module('calendar').controller('LoginController', ['$scope', '$http', '$s
       $http.post('/auth/login', $scope.user).then(function(response) {
         localStorage.setItem('userToken', response.data.token);
 
-        $state.go('a.calendar');
+        $state.go('root.authenticated.calendar');
       }, function(error) {
         $scope.error = error.data.message;
       });

@@ -1,0 +1,3 @@
+<div ng-if="notification" uib-alert ng-class="'alert-' + notification.type" dismiss-on-timeout="4000" close="closeNotification()">
+  <strong>{{ notification.title }}</strong> {{ notification.message }}
+</div>

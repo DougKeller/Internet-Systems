@@ -1,8 +1,9 @@
 var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
 
-var UserSchema = new mongoose.Schema({
+var UserSchema = new Schema({
   firstName: String,
   lastName: String,
   email: { type: String, lowercase: true, unique: true },
@@ -33,6 +34,7 @@ UserSchema.methods.generateJWT = function() {
   return jwt.sign({
     id: this._id,
     email: this.email,
+    name: this.name,
     expires: parseInt(expires.getTime() / 1000),
   }, process.env.JWT_SECRET);
 };
@@ -48,8 +50,7 @@ UserSchema.virtual('name').get(function() {
 UserSchema.set('toJSON', {
   virtuals: true,
   transform: function(_doc, user, _options) {
-    user.id = user._id;
-    delete user._id;
+    delete user.id;
     delete user.__v;
     delete user.passwordHash;
     delete user.salt;
