@@ -1,32 +1,30 @@
-angular.module('calendar').controller('CalendarController', ['$scope', '$interval', '$state', 'EventFactory', 'currentUser', 'moment', 'NotificationService',
-  function($scope, $interval, $state, EventFactory, currentUser, moment, NotificationService) {
+angular.module('calendar').controller('CalendarController', ['$scope', '$interval', '$stateParams', '$state', 'EventFactory', 'currentUser', 'moment', 'sref',
+  function($scope, $interval, $stateParams, $state, EventFactory, currentUser, moment, sref) {
+    var options;
 
-    NotificationService.success(currentUser.name + '!', 'Welcome back,');
+    (function() {
+      var period = $stateParams.period || 'week';
+      var date = $stateParams.date || moment().startOf(period).format('MM-DD-YYYY');
+      options = {
+        period: period,
+        date: date
+      };
+    })();
 
-    var loadEvents = function() {
-      EventFactory.query().then(function(events) {
+    $scope.loadEvents = function() {
+      EventFactory.query(options).then(function(events) {
         $scope.events = events;
       });
     };
-    loadEvents();
+    $scope.loadEvents();
 
-    $scope.addNewEvent = function() {
-      $scope.newEvent = new EventFactory({
-        owner: currentUser
-      });
-    };
+    $scope.changeDate = function(amount) {
+      var date = moment(options.date, 'MM-DD-YYYY');
+      var newDate = date.add(amount, options.period + 's');
 
-    $scope.cancelNewEvent = function() {
-      $scope.newEvent = undefined;
-    };
-
-    $scope.saveEvent = function() {
-      $scope.newEvent.save().then(function() {
-        loadEvents();
-        $scope.cancelNewEvent();
-      }, function(error) {
-        $scope.error = error.message;
-      });
+      options.date = newDate.format('MM-DD-YYYY');
+      $state.go(sref('calendar'), options, { notify: false });
+      $scope.loadEvents();
     };
   }
 ]);

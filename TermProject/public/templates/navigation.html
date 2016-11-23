@@ -11,11 +11,11 @@
     </div>
     <div class="collapse navbar-collapse" uib-collapse="isNavCollapsed">
       <ul class="nav navbar-nav" ng-if="isLoggedIn()">
-        <li ui-sref-active="active"><a ui-sref="root.authenticated.calendar">Daily <span class="badge">10</span></a></li>
+        <li ui-sref-active="active"><a ui-sref="{{'calendar'|sref}}">Daily <span class="badge">10</span></a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right" ng-if="!isLoggedIn()">
-        <li><a ui-sref="root.register"><span class="glyphicon glyphicon-user"></span> Register</a></li>
-        <li><a ui-sref="root.login"><span class="glyphicon glyphicon-log-in"></span> Sign In</a></li>
+        <li><a ui-sref="{{'register'|sref}}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+        <li><a ui-sref="{{'login'|sref}}"><span class="glyphicon glyphicon-log-in"></span> Sign In</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right" ng-if="isLoggedIn()">
         <li><a><span class="glyphicon glyphicon-user"></span> {{ currentUserName() }}</a></li>

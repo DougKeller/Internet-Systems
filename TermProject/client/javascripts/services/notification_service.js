@@ -1,9 +1,9 @@
 angular.module('calendar').service('NotificationService', ['$rootScope', '$timeout',
   function($rootScope, $timeout) {
-    var showNotification = function(message, title, type) {
+    var showNotification = function(title, message, type) {
       $rootScope.notification = {
-        message: message,
         title: title,
+        message: message,
         type: type
       };
       $timeout($rootScope.closeNotification, 3000);
@@ -23,7 +23,6 @@ angular.module('calendar').service('NotificationService', ['$rootScope', '$timeo
     };
 
     $rootScope.closeNotification = function() {
-      console.log('removed');
       delete $rootScope.notification;
     };
   }

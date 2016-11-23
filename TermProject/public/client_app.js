@@ -53575,8 +53575,8 @@ angular.module('calendar', [
   'ui.bootstrap'
 ]);
 
-angular.module('calendar').config(['$stateProvider', '$urlRouterProvider', 'jwtInterceptorProvider', '$httpProvider',
-  function($stateProvider, $urlRouterProvider, jwtInterceptorProvider, $httpProvider) {
+angular.module('calendar').config(['$stateProvider', '$urlRouterProvider', 'jwtInterceptorProvider', 'srefProvider', '$httpProvider', '$states',
+  function($stateProvider, $urlRouterProvider, jwtInterceptorProvider, srefProvider, $httpProvider, $states) {
 
     jwtInterceptorProvider.tokenGetter = [function() {
       return localStorage.getItem('userToken');
@@ -53586,7 +53586,50 @@ angular.module('calendar').config(['$stateProvider', '$urlRouterProvider', 'jwtI
 
     $urlRouterProvider.otherwise('/login');
 
-    $stateProvider.state('root', {
+    $states.initialize($stateProvider);
+    srefProvider.setSrefs($states.sref());
+  }
+]).run(['$rootScope', '$state', 'sref',
+  function($rootScope, $state, sref) {
+    $rootScope.$on('NotAuthorized', function() {
+      $state.go(sref('login'));
+    });
+  }
+]);
+
+angular.module('calendar').constant('$states', function() {
+  function State(name, options, children) {
+    this.options = options;
+    this.children = children || [];
+    this.children.forEach(child => child.parent = this);
+    this.name = name;
+    this.fullName = () => {
+      if (this.parent) {
+        return this.parent.fullName() + '.' + name;
+      } else {
+        return name;
+      }
+    };
+    this.getConfig = () => {
+      var config = {
+        parent: this.parent ? this.parent.fullName() : undefined
+      }
+      return angular.extend(config, options);
+    };
+    this.sref = () => {
+      var ref = {};
+      ref[this.name] = this.fullName();
+      var childrefs = this.children.map(child => child.sref());
+      return angular.extend.apply(this, [ref].concat(childrefs));
+    };
+    this.initialize = ($stateProvider) => {
+      $stateProvider.state(this.fullName(), this.getConfig());
+      this.children.forEach(child => child.initialize($stateProvider));
+    }
+  }
+
+  return new State('root',
+    {
       abstract: true,
       views: {
         notification: {
@@ -53600,95 +53643,132 @@ angular.module('calendar').config(['$stateProvider', '$urlRouterProvider', 'jwtI
           template: '<ui-view></ui-view>'
         }
       }
-    });
-    $stateProvider.state('root.login', {
-      url: '/login',
-      parent: 'root',
-      controller: 'LoginController',
-      templateUrl: 'templates/login.html',
-    });
-    $stateProvider.state('root.register', {
-      url: '/register',
-      parent: 'root',
-      controller: 'RegisterController',
-      templateUrl: 'templates/register.html'
-    });
-
-    $stateProvider.state('root.authenticated', {
-      abstract: true,
-      parent: 'root',
-      template: '<ui-view></ui-view>',
-      resolve: {
-        currentUser: function(UserFactory, $q) {
-          var deferred = $q.defer();
-
-          UserFactory.loadCurrentUser().then(function(user) {
-            deferred.resolve(user);
-          }, function() {
-            $state.go('root.login');
-            deferred.reject();
-          });
-
-          return deferred.promise;
+    },
+    [
+      new State('login',
+        {
+          url: '/login',
+          controller: 'LoginController',
+          templateUrl: 'templates/login.html'
         }
-      }
-    });
-    $stateProvider.state('root.authenticated.calendar', {
-      url: '/',
-      parent: 'root.authenticated',
-      controller: 'CalendarController',
-      templateUrl: 'templates/calendar.html'
-    });
-  }
-]).run(['$rootScope', '$state', function($rootScope, $state) {
-  $rootScope.$on('NotAuthorized', function() {
-    $state.go('root.login');
-  });
-}]);
+      ),
+      new State('register',
+        {
+          url: '/register',
+          controller: 'RegisterController',
+          templateUrl: 'templates/register.html'
+        }
+      ),
+      new State('authenticated',
+        {
+          abstract: true,
+          template: '<ui-view></ui-view>',
+          resolve: {
+            currentUser: function(UserFactory, $q, $state, sref) {
+              var deferred = $q.defer();
 
-angular.module('calendar').controller('CalendarController', ['$scope', '$interval', '$state', 'EventFactory', 'currentUser', 'moment', 'NotificationService',
-  function($scope, $interval, $state, EventFactory, currentUser, moment, NotificationService) {
+              UserFactory.loadCurrentUser().then(function(user) {
+                deferred.resolve(user);
+              }, function() {
+                $state.go(sref('login'));
+                deferred.reject();
+              });
 
-    NotificationService.success(currentUser.name + '!', 'Welcome back,');
+              return deferred.promise;
+            }
+          }
+        },
+        [
+          new State('calendar',
+            {
+              url: '/calendar?date&period',
+              controller: 'CalendarController',
+              templateUrl: 'templates/calendar.html'
+            }
+          )
+        ]
+      )
+    ]
+  );
+}());
+angular.module('calendar').controller('CalendarController', ['$scope', '$interval', '$stateParams', '$state', 'EventFactory', 'currentUser', 'moment', 'sref',
+  function($scope, $interval, $stateParams, $state, EventFactory, currentUser, moment, sref) {
+    var options;
 
-    var loadEvents = function() {
-      EventFactory.query().then(function(events) {
+    (function() {
+      var period = $stateParams.period || 'week';
+      var date = $stateParams.date || moment().startOf(period).format('MM-DD-YYYY');
+      options = {
+        period: period,
+        date: date
+      };
+    })();
+
+    $scope.loadEvents = function() {
+      EventFactory.query(options).then(function(events) {
         $scope.events = events;
       });
     };
-    loadEvents();
+    $scope.loadEvents();
 
-    $scope.addNewEvent = function() {
-      $scope.newEvent = new EventFactory({
-        owner: currentUser
-      });
-    };
+    $scope.changeDate = function(amount) {
+      var date = moment(options.date, 'MM-DD-YYYY');
+      var newDate = date.add(amount, options.period + 's');
 
-    $scope.cancelNewEvent = function() {
-      $scope.newEvent = undefined;
-    };
-
-    $scope.saveEvent = function() {
-      $scope.newEvent.save().then(function() {
-        loadEvents();
-        $scope.cancelNewEvent();
-      }, function(error) {
-        $scope.error = error.message;
-      });
+      options.date = newDate.format('MM-DD-YYYY');
+      $state.go(sref('calendar'), options, { notify: false });
+      $scope.loadEvents();
     };
   }
 ]);
-angular.module('calendar').controller('LoginController', ['$scope', '$http', '$state', 'jwtHelper',
-  function($scope, $http, $state, jwtHelper) {
+angular.module('calendar').controller('DailyCalendarController', ['$scope', '$stateParams', 'EventFactory', 'moment',
+  function($scope, $stateParams, EventFactory, moment) {
+    var date = $stateParams.date || moment().format('MM-DD-YYYY');
+
+
+    $scope.setEvents = function(date, period) {
+      var params = {
+        start: moment(date).startOf(period).format(),
+        end: moment(date).endOf(period).format()
+      };
+
+      EventFactory.query(date).then(function(events) {
+        $scope.events = events;
+      }, function(error) {
+
+      });
+    };
+
+    $scope.setEvents(moment());
+  }
+]);
+angular.module('calendar').controller('LoginController', ['$scope', '$http', '$state', 'NotificationService', 'jwtHelper', 'sref',
+  function($scope, $http, $state, NotificationService, jwtHelper, sref) {
     $scope.user = {};
+
+    var getCurrentUserToken = function() {
+      var token = localStorage.getItem('userToken');
+      if (token) {
+        return jwtHelper.decodeToken(token);
+      }
+    };
+
+    if (getCurrentUserToken()) {
+      var expired = Date.now() - getCurrentUserToken().expires <= 0;
+      if (!expired) {
+        $state.go(sref('calendar'));
+      }
+    }
 
     $scope.login = function() {
       localStorage.removeItem('userToken');
 
       $http.post('/auth/login', $scope.user).then(function(response) {
         localStorage.setItem('userToken', response.data.token);
+        var name = getCurrentUserToken().name;
 
-        $state.go('root.authenticated.calendar');
+        NotificationService.success('Welcome back,', name + '!');
+        $state.go(sref('calendar'));
       }, function(error) {
         $scope.error = error.data.message;
       });
@@ -53744,8 +53824,26 @@ angular.module('calendar').controller('RegisterController', ['$scope', '$state',
     };
   }
 ]);
-angular.module('calendar').factory('EventFactory', ['$http', '$q',
-  function($http, $q, jwtHelper) {
+angular.module('calendar').filter('queryString', function() {
+  return function(url, params) {
+    if (params) {
+      var queryParams = [];
+      for (var prop in params) {
+        var param = prop + '=' + params[prop];
+        queryParams.push(param);
+      }
+      url = url + '?' + encodeURI(queryParams.join('&'));
+    }
+    return url;
+  }
+});
+angular.module('calendar').filter('sref', ['sref',
+  function(sref) {
+    return sref;
+  }
+]);
+angular.module('calendar').factory('EventFactory', ['$http', '$q', '$filter',
+  function($http, $q, $filter) {
     function Event(data) {
       angular.extend(this, data);
     }
@@ -53764,11 +53862,11 @@ angular.module('calendar').factory('EventFactory', ['$http', '$q',
       return deferred.promise;
     };
 
-    Event.query = function() {
-      var url = '/events';
+    Event.query = function(params) {
+      var url = $filter('queryString')('/events', params);
       var deferred = $q.defer();
 
-      $http.get(url).then(function(response) {
+      $http.get(url, params).then(function(response) {
         var events = response.data.map(event => new Event(event));
         deferred.resolve(events);
       }, function(error) {
@@ -53835,12 +53933,23 @@ angular.module('calendar').factory('AuthenticationInterceptor', ['$q', '$rootSco
   }
 ]);
 
+angular.module('calendar').provider('sref', function() {
+  this.setSrefs = (srefs) => {
+    this.srefs = srefs;
+  };
+
+  this.$get = () => {
+    return (state) => {
+      return this.srefs[state];
+    };
+  };
+});
 angular.module('calendar').service('NotificationService', ['$rootScope', '$timeout',
   function($rootScope, $timeout) {
-    var showNotification = function(message, title, type) {
+    var showNotification = function(title, message, type) {
       $rootScope.notification = {
-        message: message,
         title: title,
+        message: message,
         type: type
       };
       $timeout($rootScope.closeNotification, 3000);
@@ -53860,7 +53969,6 @@ angular.module('calendar').service('NotificationService', ['$rootScope', '$timeo
     };
 
     $rootScope.closeNotification = function() {
-      console.log('removed');
       delete $rootScope.notification;
     };
   }

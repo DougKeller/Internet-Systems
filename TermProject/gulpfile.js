@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
+var nodemon = require('gulp-nodemon');
 
 var vendorPath = './client/bower_components/';
 var scriptPath = './client/javascripts/';
@@ -22,4 +23,13 @@ gulp.task('build', function() {
   return gulp.src(scriptDependencies)
              .pipe(concat('client_app.js'))
              .pipe(gulp.dest('./public'));
+});
+
+gulp.task('start', function() {
+  nodemon({
+    script: './bin/www',
+    tasks: ['build'],
+    ext: 'js html',
+    ignore: ['client_app.js']
+  })
 });
