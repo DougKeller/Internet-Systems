@@ -4,8 +4,17 @@ angular.module('calendar').provider('sref', function() {
   };
 
   this.$get = () => {
-    return (state) => {
-      return this.srefs[state];
+    return (state, params) => {
+      if (params) {
+        var values = [];
+        for (var prop in params) {
+          values.push("'" + prop + "':'" + params[prop] + "'");
+        }
+        var paramString = '({' + values.join(',') + '})';
+        return this.srefs[state] + paramString;
+      } else {
+        return this.srefs[state];
+      }
     };
   };
 });

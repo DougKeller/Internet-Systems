@@ -1,10 +1,20 @@
-<div class="container-fluid">
+<div class="container">
   <div class="row">
-    <div class="col-md-4">
-      <form class="well well-sm">
-        <button class="btn btn-default" ng-click="changeDate(-1)">Previous</button>
-        <button class="btn btn-default" ng-click="changeDate(1)">Next</button>
-      </form>
+    <h3 class="lead">{{ dateRange() }}</h3>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="input-group">
+        <span ng-click="changeDate(-1)" class="input-group-addon btn">
+          <i class="glyphicon glyphicon-chevron-left"></i>
+        </span>
+        <input class="text-center form-control" type="date" ng-model="customDate" ng-change="setDate(customDate)" />
+        <span ng-click="changeDate(1)" class="input-group-addon btn">
+          <i class="glyphicon glyphicon-chevron-right"></i>
+        </span>
+      </div>
     </div>
   </div>
+  <hr></div>
+  <div class="row" ng-include="'templates/calendar_' + period() + '.html'"></div>
 </div>

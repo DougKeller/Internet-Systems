@@ -26,3 +26,20 @@ body {
 .notification.active {
   height: 50px;
 }
+
+.calendar-cell {
+  padding: 10px;
+  margin: 0px;
+}
+
+.calendar-cell-week, .calendar-cell-month {
+  width: 14.29%;
+}
+
+.calendar-cell-day {
+  width: 100%;
+}
+
+.calendar-header {
+  width: 200px;
+}

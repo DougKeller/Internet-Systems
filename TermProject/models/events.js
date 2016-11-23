@@ -3,6 +3,8 @@ var Schema = mongoose.Schema;
 
 var EventSchema = new Schema({
   title: String,
+  createdAt: Date,
+  updatedAt: Date,
   startTime: Date,
   endTime: Date,
   description: String,

@@ -11,7 +11,9 @@
     </div>
     <div class="collapse navbar-collapse" uib-collapse="isNavCollapsed">
       <ul class="nav navbar-nav" ng-if="isLoggedIn()">
-        <li ui-sref-active="active"><a ui-sref="{{'calendar'|sref}}">Daily <span class="badge">10</span></a></li>
+        <li ui-sref-active="active"><a ui-sref="{{'calendar'|sref:{period:'day'} }}">Daily</a></li>
+        <li ui-sref-active="active"><a ui-sref="{{'calendar'|sref:{period:'week'} }}">Weekly</a></li>
+        <li ui-sref-active="active"><a ui-sref="{{'calendar'|sref:{period:'month'} }}">Monthly</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right" ng-if="!isLoggedIn()">
         <li><a ui-sref="{{'register'|sref}}"><span class="glyphicon glyphicon-user"></span> Register</a></li>

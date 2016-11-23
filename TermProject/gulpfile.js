@@ -5,8 +5,9 @@ var nodemon = require('gulp-nodemon');
 
 var vendorPath = './client/bower_components/';
 var scriptPath = './client/javascripts/';
+var stylesPath = './client/stylesheets/';
 
-gulp.task('build', function() {
+gulp.task('buildJavascript', function() {
   var scriptDependencies = [
     vendorPath + 'angular/angular.js',
     vendorPath + 'angular-animate/angular-animate.js',
@@ -21,15 +22,37 @@ gulp.task('build', function() {
   ];
 
   return gulp.src(scriptDependencies)
-             .pipe(concat('client_app.js'))
+             .pipe(concat('application.js'))
              .pipe(gulp.dest('./public'));
+});
+
+gulp.task('buildStyles', function() {
+  var scriptDependencies = [
+    vendorPath + 'angular-bootstrap/ui-bootstrap-csp.css',
+    vendorPath + 'bootstrap/dist/css/bootstrap.css',
+    stylesPath + '*.css',
+    stylesPath + '**/*.css'
+  ];
+
+  return gulp.src(scriptDependencies)
+             .pipe(concat('application.css'))
+             .pipe(gulp.dest('./public'));
+});
+
+gulp.task('buildFonts', function() {
+  var scriptDependencies = [
+    vendorPath + 'bootstrap/dist/fonts/*.*'
+  ];
+
+  return gulp.src(scriptDependencies)
+             .pipe(gulp.dest('./public/fonts'));
 });
 
 gulp.task('start', function() {
   nodemon({
     script: './bin/www',
-    tasks: ['build'],
-    ext: 'js html',
-    ignore: ['client_app.js']
+    tasks: ['buildJavascript', 'buildStyles', 'buildFonts'],
+    ext: 'js ejs html css',
+    ignore: ['application.js', 'application.css']
   })
 });

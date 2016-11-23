@@ -53704,6 +53704,11 @@ angular.module('calendar').controller('CalendarController', ['$scope', '$interva
       };
     })();
 
+    $scope.period = () => { return options.period };
+    $scope.startDate = () => { return moment(options.date, 'MM-DD-YYYY').startOf(options.period); };
+    $scope.endDate = () => { return moment(options.date, 'MM-DD-YYYY').endOf(options.period); };
+    $scope.customDate = $scope.startDate().toDate();
+
     $scope.loadEvents = function() {
       EventFactory.query(options).then(function(events) {
         $scope.events = events;
@@ -53712,12 +53717,74 @@ angular.module('calendar').controller('CalendarController', ['$scope', '$interva
     $scope.loadEvents();
 
     $scope.changeDate = function(amount) {
-      var date = moment(options.date, 'MM-DD-YYYY');
+      var date = $scope.startDate();
       var newDate = date.add(amount, options.period + 's');
 
+      $scope.customDate = newDate.toDate();
       options.date = newDate.format('MM-DD-YYYY');
       $state.go(sref('calendar'), options, { notify: false });
       $scope.loadEvents();
+    };
+
+    $scope.setDate = function(date) {
+      options.date = moment(date).format('MM-DD-YYYY');
+      $state.go(sref('calendar'), options, { notify: false });
+      $scope.loadEvents();
+    };
+
+    $scope.dateRange = function() {
+      if (options.period === 'day') {
+        return $scope.startDate().format('MMM DD, YYYY');
+      } else {
+        var start = $scope.startDate().format('MMM DD, YYYY');
+        var end = $scope.endDate().format('MMM DD, YYYY');
+        return start + ' - ' + end;
+      }
+    };
+
+    $scope.visibleDates = function(row) {
+      var date = $scope.startDate();
+      var dates = [];
+      while (date.isSameOrBefore($scope.endDate())) {
+        dates.push(date.clone());
+        date = date.add(1, 'day');
+      }
+      return dates;
+    };
+
+    var monthDates = {};
+    $scope.monthDates = function() {
+      if (monthDates[$scope.startDate().format()]) {
+        return monthDates[$scope.startDate().format()];
+      }
+
+      var date = $scope.startDate();
+      var dates = [[]];
+      var currentRow = 0;
+
+      while (date.isSameOrBefore($scope.endDate())) {
+        dates[currentRow].push(date.clone());
+        date = date.add(1, 'days');
+        if (date.day() === 0) {
+          dates.push([]);
+          currentRow += 1;
+        }
+      }
+
+      while (dates[0][0].day() !== 0) {
+        dates[0].unshift(dates[0][0].clone().subtract(1, 'day'))
+      }
+
+      var finalRow = dates.length - 1;
+      while (dates[finalRow].length < 7) {
+        var finalIndex = dates[finalRow].length - 1;
+        var finalDate = dates[finalRow][finalIndex].clone();
+        dates[finalRow].push(finalDate.add(1, 'day'))
+      }
+
+      monthDates[$scope.startDate().format()] = dates;
+
+      return dates;
     };
   }
 ]);
@@ -53919,31 +53986,6 @@ angular.module('calendar').factory('UserFactory', ['$http', '$q', 'jwtHelper',
     return User;
   }
 ]);
-angular.module('calendar').factory('AuthenticationInterceptor', ['$q', '$rootScope',
-  function($q, $rootScope) {
-    return {
-      responseError: function(response) {
-        var matchesAuthenticatePath = response.config && response.config.url.match(new RegExp('/auth/login'));
-        if (!matchesAuthenticatePath && response.status === 401) {
-          $rootScope.$broadcast('NotAuthorized');
-        }
-        return $q.reject(response);
-      }
-    };
-  }
-]);
-
-angular.module('calendar').provider('sref', function() {
-  this.setSrefs = (srefs) => {
-    this.srefs = srefs;
-  };
-
-  this.$get = () => {
-    return (state) => {
-      return this.srefs[state];
-    };
-  };
-});
 angular.module('calendar').service('NotificationService', ['$rootScope', '$timeout',
   function($rootScope, $timeout) {
     var showNotification = function(title, message, type) {
@@ -53973,3 +54015,37 @@ angular.module('calendar').service('NotificationService', ['$rootScope', '$timeo
     };
   }
 ]);
+angular.module('calendar').factory('AuthenticationInterceptor', ['$q', '$rootScope',
+  function($q, $rootScope) {
+    return {
+      responseError: function(response) {
+        var matchesAuthenticatePath = response.config && response.config.url.match(new RegExp('/auth/login'));
+        if (!matchesAuthenticatePath && response.status === 401) {
+          $rootScope.$broadcast('NotAuthorized');
+        }
+        return $q.reject(response);
+      }
+    };
+  }
+]);
+
+angular.module('calendar').provider('sref', function() {
+  this.setSrefs = (srefs) => {
+    this.srefs = srefs;
+  };
+
+  this.$get = () => {
+    return (state, params) => {
+      if (params) {
+        var values = [];
+        for (var prop in params) {
+          values.push("'" + prop + "':'" + params[prop] + "'");
+        }
+        var paramString = '({' + values.join(',') + '})';
+        return this.srefs[state] + paramString;
+      } else {
+        return this.srefs[state];
+      }
+    };
+  };
+});

@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var moment = require('moment');
 
 var mongoose = require('mongoose');
 var Event = mongoose.model('Event');
@@ -20,6 +21,7 @@ router.post('/', authenticate, function(request, response, next) {
 
   var event = new Event();
   permittedAttributes.forEach(attr => event[attr] = request.body[attr]);
+  event.createdAt = event.updatedAt = new Date();
 
   event.save(function(error) {
     if (error) {
