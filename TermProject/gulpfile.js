@@ -16,6 +16,7 @@ gulp.task('buildJavascript', function() {
     vendorPath + 'angular-bootstrap/ui-bootstrap-tpls.js',
     vendorPath + 'moment/moment.js',
     vendorPath + 'angular-moment/angular-moment.js',
+    vendorPath + 'angular-datepicker/dist/angular-datepicker.js',
     scriptPath + 'angular_modules.js',
     scriptPath + '*.js',
     scriptPath + '**/*.js'
@@ -30,6 +31,7 @@ gulp.task('buildStyles', function() {
   var scriptDependencies = [
     vendorPath + 'angular-bootstrap/ui-bootstrap-csp.css',
     vendorPath + 'bootstrap/dist/css/bootstrap.css',
+    vendorPath + 'angular-datepicker/dist/angular-datepicker.css',
     stylesPath + '*.css',
     stylesPath + '**/*.css'
   ];

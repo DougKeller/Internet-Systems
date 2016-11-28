@@ -1,4 +1,6 @@
 /node_modules
 /client/bower_components
+/public/application.js
+/public/application.css
 npm-debug.log
 .env

@@ -1,97 +1,107 @@
 angular.module('calendar').controller('CalendarController', ['$scope', '$interval', '$stateParams', '$state', 'EventFactory', 'currentUser', 'moment', 'sref',
   function($scope, $interval, $stateParams, $state, EventFactory, currentUser, moment, sref) {
-    var options;
+    var params, current;
 
-    (function() {
-      var period = $stateParams.period || 'week';
-      var date = $stateParams.date || moment().startOf(period).format('MM-DD-YYYY');
-      options = {
+    function setCurrentDates() {
+      var dates = current.dates = [current.start.clone()];
+      if (current.period === 'day') {
+        return;
+      }
+
+      var firstDate = () => dates[0].clone();
+      var lastDate = () => dates[dates.length - 1].clone();
+
+      while (firstDate().day() !== 0) {
+        var subtracted = firstDate().subtract(1, 'days');
+        dates.unshift(subtracted);
+      }
+      while (lastDate().endOf('day').isBefore(current.end)) {
+        dates.push(lastDate().add(1, 'days'));
+      }
+      while (lastDate().day() !== 6) {
+        dates.push(lastDate().add(1, 'days'));
+      }
+
+      if (current.period === 'month') {
+        var weeks = [];
+
+        while (dates.length > 0) {
+          weeks.push(dates.splice(0, 7));
+        }
+
+        delete current.dates;
+        current.weeks = weeks;
+      }
+    }
+
+    function setTitle() {
+      switch (current.period) {
+        case 'day':
+          $scope.title = current.start.format('MMMM D, YYYY');
+          break;
+        case 'week':
+          var start = current.start.format('MMM D, YYYY');
+          var end = current.end.format('MMM D, YYYY');
+          $scope.title = start + ' - ' + end;
+          break;
+        case 'month':
+          $scope.title = current.start.format('MMMM YYYY');
+          break;
+      }
+    }
+
+    function initialize(date, period) {
+      period = period || 'week';
+      if (date) {
+        date = moment(date, 'MM-DD-YYYY').startOf(period);
+      } else {
+        date = moment().startOf(period);
+      }
+
+      params = {
         period: period,
-        date: date
+        date: date.format('MM-DD-YYYY')
       };
-    })();
 
-    $scope.period = () => { return options.period };
-    $scope.startDate = () => { return moment(options.date, 'MM-DD-YYYY').startOf(options.period); };
-    $scope.endDate = () => { return moment(options.date, 'MM-DD-YYYY').endOf(options.period); };
-    $scope.customDate = $scope.startDate().toDate();
+      current = {
+        start: date.clone(),
+        end: date.endOf(period).clone(),
+        templateUrl: 'templates/calendar_' + period + '.html',
+        period: period
+      };
+
+      $scope.customDate = date.clone().startOf(period);
+      $scope.current = current;
+      setTitle();
+      setCurrentDates();
+
+      var startView = period === 'month' ? 'month' : 'day';
+      $scope.pickerConfig = {
+        minView: startView,
+        startView: startView,
+        modelType: 'moment'
+      };
+
+      $scope.loadEvents();
+    }
 
     $scope.loadEvents = function() {
-      EventFactory.query(options).then(function(events) {
+      EventFactory.query(params).then(function(events) {
         $scope.events = events;
       });
     };
-    $scope.loadEvents();
-
-    $scope.changeDate = function(amount) {
-      var date = $scope.startDate();
-      var newDate = date.add(amount, options.period + 's');
-
-      $scope.customDate = newDate.toDate();
-      options.date = newDate.format('MM-DD-YYYY');
-      $state.go(sref('calendar'), options, { notify: false });
-      $scope.loadEvents();
-    };
 
     $scope.setDate = function(date) {
-      options.date = moment(date).format('MM-DD-YYYY');
-      $state.go(sref('calendar'), options, { notify: false });
-      $scope.loadEvents();
+      $state.go(sref('calendar'), params, { notify: false });
+      initialize(moment(date).format('MM-DD-YYYY'), params.period);
     };
 
-    $scope.dateRange = function() {
-      if (options.period === 'day') {
-        return $scope.startDate().format('MMM DD, YYYY');
-      } else {
-        var start = $scope.startDate().format('MMM DD, YYYY');
-        var end = $scope.endDate().format('MMM DD, YYYY');
-        return start + ' - ' + end;
-      }
+    $scope.changeDate = function(amount) {
+      var newDate = current.start.add(amount, params.period + 's');
+      $scope.setDate(newDate);
     };
 
-    $scope.visibleDates = function(row) {
-      var date = $scope.startDate();
-      var dates = [];
-      while (date.isSameOrBefore($scope.endDate())) {
-        dates.push(date.clone());
-        date = date.add(1, 'day');
-      }
-      return dates;
-    };
-
-    var monthDates = {};
-    $scope.monthDates = function() {
-      if (monthDates[$scope.startDate().format()]) {
-        return monthDates[$scope.startDate().format()];
-      }
-
-      var date = $scope.startDate();
-      var dates = [[]];
-      var currentRow = 0;
-
-      while (date.isSameOrBefore($scope.endDate())) {
-        dates[currentRow].push(date.clone());
-        date = date.add(1, 'days');
-        if (date.day() === 0) {
-          dates.push([]);
-          currentRow += 1;
-        }
-      }
-
-      while (dates[0][0].day() !== 0) {
-        dates[0].unshift(dates[0][0].clone().subtract(1, 'day'))
-      }
-
-      var finalRow = dates.length - 1;
-      while (dates[finalRow].length < 7) {
-        var finalIndex = dates[finalRow].length - 1;
-        var finalDate = dates[finalRow][finalIndex].clone();
-        dates[finalRow].push(finalDate.add(1, 'day'))
-      }
-
-      monthDates[$scope.startDate().format()] = dates;
-
-      return dates;
-    };
+    console.log('initializing', $stateParams);
+    initialize($stateParams.date, $stateParams.period);
   }
 ]);

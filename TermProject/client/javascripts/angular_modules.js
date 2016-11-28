@@ -3,5 +3,6 @@ angular.module('calendar', [
   'angular-jwt',
   'ui.router',
   'angularMoment',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'ui.bootstrap.datetimepicker'
 ]);

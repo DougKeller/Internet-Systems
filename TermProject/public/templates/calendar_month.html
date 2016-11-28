@@ -1,24 +1,7 @@
-<div class="col-md-12">
-  <div class="table-responsive">
-    <table class="table table-bordered">
-      <thead>
-        <tr class="info">
-          <th class="calendar-header">Sunday</th>
-          <th class="calendar-header">Monday</th>
-          <th class="calendar-header">Tuesday</th>
-          <th class="calendar-header">Wednesday</th>
-          <th class="calendar-header">Thursday</th>
-          <th class="calendar-header">Friday</th>
-          <th class="calendar-header">Saturday</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="row in monthDates()">
-          <td class="calendar-cell-month" ng-repeat="date in row" ng-class="{active: date.isBefore(startDate()) || date.isAfter(endDate())}">
-            {{ date.format('D') }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+<div class="calendar-row" ng-repeat="week in current.weeks">
+  <div class="calendar-cell" ng-repeat="day in week" ng-class="{ 'inactive': day.isBefore(current.start) || day.isAfter(current.end) }">
+    <div class="date">
+      {{ day.format('D') }}
+    </div>
   </div>
 </div>

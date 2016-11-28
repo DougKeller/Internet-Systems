@@ -1,20 +1,27 @@
-<div class="container">
-  <div class="row">
-    <h3 class="lead">{{ dateRange() }}</h3>
-  </div>
-  <div class="row">
-    <div class="col-md-3">
-      <div class="input-group">
-        <span ng-click="changeDate(-1)" class="input-group-addon btn">
-          <i class="glyphicon glyphicon-chevron-left"></i>
-        </span>
-        <input class="text-center form-control" type="date" ng-model="customDate" ng-change="setDate(customDate)" />
-        <span ng-click="changeDate(1)" class="input-group-addon btn">
-          <i class="glyphicon glyphicon-chevron-right"></i>
-        </span>
+<div class="col-md-10 col-md-offset-1">
+  <div class="row text-center">
+    <div class="col-md-6 col-md-offset-3 text-center">
+      <h3 class="lead">
+        <i class="glyphicon glyphicon-chevron-left date-select" ng-click="changeDate(-1)"></i>
+        <span>{{ title }}</span>
+        <i class="glyphicon glyphicon-chevron-right date-select" ng-click="changeDate(1)"></i>
+      </h3>
+    </div>
+    <div class="col-md-3 pull-right">
+      <div class="datetimepicker-main" uib-dropdown>
+        <a uib-dropdown-toggle>
+          <div class="input-group">
+            <input readonly type="text" class="form-control bg-white" ng-value="customDate.format('MMM D, YYYY')" />
+            <span class="input-group-addon">
+              <i class="glyphicon glyphicon-calendar"></i>
+            </span>
+          </div>
+        </a>
+        <ul uib-dropdown-menu>
+          <datetimepicker ng-model="customDate" ng-change="setDate(customDate)" datetimepicker-config="pickerConfig"/>
+        </ul>
       </div>
     </div>
   </div>
-  <hr></div>
-  <div class="row" ng-include="'templates/calendar_' + period() + '.html'"></div>
+  <div class="row" ng-include="current.templateUrl"></div>
 </div>

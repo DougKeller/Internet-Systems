@@ -6872,8 +6872,127 @@ button.close {
 }
 /*# sourceMappingURL=bootstrap.css.map */
 
+/**
+ * @license angular-bootstrap-datetimepicker
+ * Copyright 2016 Knight Rider Consulting, Inc. http://www.knightrider.com
+ * License: MIT
+ */
+.datetimepicker-main {
+  margin-top: 20px;
+}
+.datetimepicker {
+  border-radius: 4px;
+  direction: ltr;
+  display: block;
+  margin-top: 1px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  width: 320px;
+}
+.datetimepicker > div {
+  display: none;
+}
+.datetimepicker .hour,
+.datetimepicker .minute {
+  height: 34px;
+  line-height: 34px;
+  margin: 0;
+  width: 25%;
+}
+.datetimepicker .table {
+  margin: 0;
+}
+.datetimepicker .table td,
+.datetimepicker .table th {
+  border: 0;
+  border-radius: 4px;
+  height: 20px;
+  text-align: center;
+}
+.datetimepicker .minute:hover,
+.datetimepicker .hour:hover,
+.datetimepicker .day:hover,
+.datetimepicker .switch:hover,
+.datetimepicker .left:hover,
+.datetimepicker .right:hover {
+  background: #eee;
+  cursor: pointer;
+}
+.datetimepicker .disabled,
+.datetimepicker .disabled:hover {
+  background: none;
+  color: #ebebeb;
+  cursor: default;
+}
+.datetimepicker .active,
+.datetimepicker .active:hover,
+.datetimepicker .active.disabled,
+.datetimepicker .active.disabled:hover {
+  background-color: #04c;
+  background-image: linear-gradient(to bottom, #08c, #04c);
+  background-repeat: repeat-x;
+  border-color: #04c #04c #002a80;
+  color: #fff;
+  -webkit-filter: progid:dximagetransform.microsoft.gradient(startColorstr='#08c', endColorstr='#04c', GradientType=0);
+  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#08c', endColorstr='#04c', GradientType=0);
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+.datetimepicker .current,
+.datetimepicker .current:hover,
+.datetimepicker .current.disabled,
+.datetimepicker .current.disabled:hover {
+  background-color: #e5e5e5;
+}
+.datetimepicker .active:hover,
+.datetimepicker .active:hover:hover,
+.datetimepicker .active.disabled:hover,
+.datetimepicker .active.disabled:hover:hover,
+.datetimepicker .active:active,
+.datetimepicker .active:hover:active,
+.datetimepicker .active.disabled:active,
+.datetimepicker .active.disabled:hover:active,
+.datetimepicker .active.active,
+.datetimepicker .active:hover.active,
+.datetimepicker .active.disabled.active,
+.datetimepicker .active.disabled:hover.active,
+.datetimepicker .active.disabled,
+.datetimepicker .active:hover.disabled,
+.datetimepicker .active.disabled.disabled,
+.datetimepicker .active.disabled:hover.disabled,
+.datetimepicker td.active[disabled],
+.datetimepicker td.active:hover[disabled],
+.datetimepicker td.active.disabled[disabled],
+.datetimepicker td.active.disabled:hover[disabled],
+.datetimepicker span.active[disabled],
+.datetimepicker span.active:hover[disabled],
+.datetimepicker span.active.disabled[disabled],
+.datetimepicker span.active.disabled:hover[disabled] {
+  background-color: #04c;
+}
+.datetimepicker span {
+  border-radius: 4px;
+  cursor: pointer;
+  display: block;
+  float: left;
+  height: 54px;
+  line-height: 54px;
+  margin: 1%;
+  width: 23%;
+}
+.datetimepicker span:hover {
+  background: #eee;
+}
+.datetimepicker .past,
+.datetimepicker .future {
+  color: #999;
+}
+
+/*# sourceMappingURL=datetimepicker.css.map */
+
 body {
-  padding-top: 70px;
+  padding-top: 50px;
 }
 
 .nav, .pagination, .carousel, .panel-title a {
@@ -6901,19 +7020,60 @@ body {
   height: 50px;
 }
 
+.calendar-row:first-child .calendar-cell {
+  border-top: 1px solid #777;
+}
+.calendar-row:last-child .calendar-cell {
+  border-bottom: 1px solid #777;
+}
+
 .calendar-cell {
-  padding: 10px;
-  margin: 0px;
+  float:left;
+  position: relative;
+  width: 14.2857%;
+  padding-bottom: 14%; /* = width for a 1:1 aspect ratio */
+  border-top: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+}
+.calendar-cell:first-child {
+  border-left: 1px solid #777;
+}
+.calendar-cell:last-child {
+  border-right: 1px solid #777;
+}
+.calendar-cell:hover {
+  background-color: #fcfcfc;
+  cursor: pointer;
+}
+.calendar-cell.inactive {
+  background-color: #eee;
+  color: #888;
+}
+.calendar-cell.inactive:hover {
+  background-color: #eee;
+  cursor: default;
 }
 
-.calendar-cell-week, .calendar-cell-month {
-  width: 14.29%;
+.calendar-cell .date {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  padding: 5% 5%;
+  text-align: center;
 }
 
-.calendar-cell-day {
-  width: 100%;
+.content {
+  position:absolute;
+  height:80%; /* = 100% - 2*10% padding */
+  width:90%; /* = 100% - 2*5% padding */
+  padding: 10% 5%;
 }
 
-.calendar-header {
-  width: 200px;
+.bg-white {
+  background: white !important;
+}
+
+.date-select {
+  color: #337ab7;
+  cursor: pointer;
 }
