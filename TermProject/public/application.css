@@ -7020,13 +7020,6 @@ body {
   height: 50px;
 }
 
-.calendar-row:first-child .calendar-cell {
-  border-top: 1px solid #777;
-}
-.calendar-row:last-child .calendar-cell {
-  border-bottom: 1px solid #777;
-}
-
 .calendar-cell {
   float:left;
   position: relative;
@@ -7060,6 +7053,61 @@ body {
   left: 0px;
   padding: 5% 5%;
   text-align: center;
+}
+
+.calendar-head {
+  float: left;
+  position: relative;
+  width: 14.2857%;
+  border-top: 1px solid #777;
+  border-right: 1px solid #ddd;
+  padding: 10px;
+}
+.calendar-head:first-child {
+  border-left: 1px solid #777;
+}
+.calendar-head:last-child {
+  border-right: 1px solid #777;
+}
+
+.calendar-row:last-child .calendar-cell,.calendar-column {
+  border-bottom: 1px solid #777;
+}
+
+.calendar-subdivision {
+  height: 4.3472%;
+  border-bottom: 1px solid #fafafa;
+  width: 100%;
+  position: relative;
+}
+.calendar-subdivision:nth-child(6n) {
+  border-bottom: 1px solid #eee;
+}
+.calendar-subdivision:last-child {
+  border-bottom: none;
+}
+.calendar-subdivision:hover {
+  background-color: #fafafa;
+}
+.calendar-subdivision .time {
+  position: absolute;
+  padding-left: 5px;
+  bottom: 0px;
+  left: 0px;
+  font-size: 0.8rem;
+  color: #ddd;
+}
+
+.calendar-column {
+  height: 500px;
+  padding: 0px;
+}
+
+.clickable {
+  cursor: pointer;
+}
+.clickable:hover {
+  background-color: #fafafa;
 }
 
 .content {

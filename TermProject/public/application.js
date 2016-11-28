@@ -54347,6 +54347,18 @@ angular.module('calendar').controller('CalendarController', ['$scope', '$interva
       }
     }
 
+    function setDateDivisions() {
+      if (current.period === 'month') {
+        return;
+      }
+      current.dates.forEach(function(date) {
+        date.subdivisions = [];
+        for (var i = 1; i <= 24; i += 1) {
+          date.subdivisions.push(date.clone().add(i, 'hours'));
+        }
+      });
+    }
+
     function setTitle() {
       switch (current.period) {
         case 'day':
@@ -54387,6 +54399,7 @@ angular.module('calendar').controller('CalendarController', ['$scope', '$interva
       $scope.current = current;
       setTitle();
       setCurrentDates();
+      setDateDivisions();
 
       var startView = period === 'month' ? 'month' : 'day';
       $scope.pickerConfig = {
@@ -54414,7 +54427,13 @@ angular.module('calendar').controller('CalendarController', ['$scope', '$interva
       $scope.setDate(newDate);
     };
 
-    console.log('initializing', $stateParams);
+    $scope.goToDailyView = function(date) {
+      $state.go(sref('calendar'), {
+        date: date.format('MM-DD-YYYY'),
+        period: 'day'
+      });
+    };
+
     initialize($stateParams.date, $stateParams.period);
   }
 ]);

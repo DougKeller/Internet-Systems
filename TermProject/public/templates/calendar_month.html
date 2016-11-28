@@ -1,5 +1,14 @@
+<div>
+  <div class="calendar-head">Sunday</div>
+  <div class="calendar-head">Monday</div>
+  <div class="calendar-head">Tuesday</div>
+  <div class="calendar-head">Wednesday</div>
+  <div class="calendar-head">Thursday</div>
+  <div class="calendar-head">Friday</div>
+  <div class="calendar-head">Saturday</div>
+</div>
 <div class="calendar-row" ng-repeat="week in current.weeks">
-  <div class="calendar-cell" ng-repeat="day in week" ng-class="{ 'inactive': day.isBefore(current.start) || day.isAfter(current.end) }">
+  <div class="clickable calendar-cell" ng-click="goToDailyView(day)" ng-repeat="day in week" ng-class="{ 'inactive': day.isBefore(current.start) || day.isAfter(current.end) }">
     <div class="date">
       {{ day.format('D') }}
     </div>
