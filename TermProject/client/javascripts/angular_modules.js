@@ -1,4 +1,5 @@
 angular.module('calendar', [
+  'templates',
   'ngAnimate',
   'angular-jwt',
   'ui.router',

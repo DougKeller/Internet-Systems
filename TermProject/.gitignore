@@ -1,5 +1,6 @@
 /node_modules
 /client/bower_components
+/client/javascripts/templates.js
 /public/application.js
 /public/application.css
 npm-debug.log

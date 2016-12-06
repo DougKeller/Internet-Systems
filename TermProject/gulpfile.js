@@ -1,11 +1,22 @@
 var gulp = require('gulp');
 var concat = require('gulp-concat');
+var nghtml2js = require('gulp-ng-html2js');
 var uglify = require('gulp-uglify');
 var nodemon = require('gulp-nodemon');
 
 var vendorPath = './client/bower_components/';
 var scriptPath = './client/javascripts/';
 var stylesPath = './client/stylesheets/';
+var templatePath = './client/templates/';
+
+gulp.task('buildTemplates', function() {
+  return gulp.src(templatePath + '**/*.html')
+    .pipe(nghtml2js({
+      moduleName: 'templates'
+    }))
+    .pipe(concat('templates.js'))
+    .pipe(gulp.dest(scriptPath));
+});
 
 gulp.task('buildJavascript', function() {
   var scriptDependencies = [
@@ -17,6 +28,7 @@ gulp.task('buildJavascript', function() {
     vendorPath + 'moment/moment.js',
     vendorPath + 'angular-moment/angular-moment.js',
     vendorPath + 'angular-datepicker/dist/angular-datepicker.js',
+    scriptPath + 'templates.js',
     scriptPath + 'angular_modules.js',
     scriptPath + '*.js',
     scriptPath + '**/*.js'
@@ -53,8 +65,8 @@ gulp.task('buildFonts', function() {
 gulp.task('start', function() {
   nodemon({
     script: './bin/www',
-    tasks: ['buildJavascript', 'buildStyles', 'buildFonts'],
+    tasks: ['buildTemplates', 'buildJavascript', 'buildStyles', 'buildFonts'],
     ext: 'js ejs html css',
-    ignore: ['application.js', 'application.css']
+    ignore: ['application.js', 'application.css', 'templates.js']
   })
 });
