@@ -14,7 +14,7 @@
     </div>
     <div class="content">
       <span ng-repeat="task in eventsForDate(day, 'day')" class="entry" ng-class="task.cssClass(day)" ng-click="showEvent(task); $event.stopPropagation()">
-        <span class="lead time">{{ task.startTime.format('h:mma') }}</span> {{ task.title }}
+        <span class="lead time">{{ task.startTime.format('h:mma') }}</span><span class="title">{{ task.title }}</span>
       </span>
     </div>
   </div>

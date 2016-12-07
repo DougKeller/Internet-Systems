@@ -27,6 +27,10 @@ body {
   height: 50px;
 }
 
+.date {
+  cursor: pointer;
+}
+
 .calendar-cell {
   float:left;
   position: relative;
@@ -86,6 +90,8 @@ body {
   border-bottom: 1px solid #fafafa;
   width: 100%;
   position: relative;
+  display: flex;
+  align-items: center;
 }
 .calendar-subdivision:nth-child(6n) {
   border-bottom: 1px solid #eee;
@@ -103,6 +109,19 @@ body {
   left: 0px;
   font-size: 0.8rem;
   color: #ddd;
+}
+.calendar-subdivision .row {
+  position: absolute;
+  padding-left: 60px;
+  font-size: 0.9rem;
+  width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.calendar-subdivision .row:hover {
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .calendar-column {
@@ -127,9 +146,8 @@ body {
   align-items: stretch;
 }
 
-.content span.entry {
+.entry {
   margin-bottom: 1px;
-  background-color: #efc;
   padding-left: 2%;
   padding-right: 2%;
   width: 100%;
@@ -137,18 +155,47 @@ body {
   white-space: nowrap;
   overflow: hidden;
   color: #00529B;
-  background-color: #BDE5F8;
 }
-.content span.occurring-soon {
+.calendar-subdivision .entry {
+  padding-left: 40px;
+}
+.occurring-later {
+  color: #00529B;
+  background-color: #BDE5F8 !important;
+}
+.occurring-later .time {
+  color: #00529B !important;
+}
+.occurring-soon {
   color: #9F6000;
-  background-color: #FEEFB3;
+  background-color: #FEEFB3 !important;
 }
-.content span.occurred {
-  color: #777;
-  background-color: #bbb;
+.occurring-soon .time {
+  color: #9F6000 !important;
+}
+.occurring {
+  color: #4F8A10;
+  background-color: #DFF2BF !important;
+}
+.occurring-soon .time {
+  color: #4F8A10 !important;
+}
+.occurred {
+  color: #ccc;
+  background-color: rgba(0,0,0,0) !important;
+}
+.remove-border {
+  border-bottom: 1px solid rgba(0,0,0,0);
 }
 .content span .time {
   font-size: 0.95rem;
+  padding-right: 5px;
+}
+.content span .title:hover {
+  text-decoration: underline !important;
+}
+.content span.occurred .title {
+  text-decoration: line-through;
 }
 
 .bg-white {

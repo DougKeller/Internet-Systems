@@ -3,20 +3,14 @@
     <table class="table table-bordered">
       <thead>
         <tr>
-          <th class="clickable" ng-repeat="date in current.dates" ng-click="goToDailyView(date)">
+          <th ng-repeat="date in current.dates">
             {{ date.format('ddd MMM D') }}
           </th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td style="padding: 0px;" class="calendar-column" ng-repeat="date in current.dates">
-            <div class="calendar-subdivision" ng-repeat="sub in date.subdivisions" ng-click="createEvent(sub)">
-              <div class="time">
-                {{ sub.format('h:mm a') }}
-              </div>
-            </div>
-          </td>
+          <td style="padding: 0px;" class="calendar-column" ng-repeat="date in current.dates" ng-include="'single_date.html'"></td>
         </tr>
       </tbody>
     </table>

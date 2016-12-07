@@ -2,6 +2,10 @@ angular.module('calendar').factory('EventFactory', ['$http', '$q', '$filter', 'C
   function($http, $q, $filter, CalendarDays, moment) {
     function Event(data) {
       angular.extend(this, data);
+      var dateFields = ['startTime', 'endTime', 'recurringStart', 'recurringEnd'];
+      dateFields.forEach((field) => {
+        this[field] = this[field] ? moment(this[field]) : undefined
+      });
     }
 
     Event.find = function(id) {
@@ -41,15 +45,26 @@ angular.module('calendar').factory('EventFactory', ['$http', '$q', '$filter', 'C
       return angular.isUndefined(this.id);
     };
 
-    Event.prototype.isOccurringSoonRelativeTo = function(date) {
-      var now = moment();
-      var oneHourFromNow = moment().add(1, 'hours');
+    Event.prototype.isOccurringWithinXHours = function(date, hours) {
+      var rangeStart = moment();
+      var rangeEnd = moment().add(hours, 'hours');
       var start = this.startTime.clone().set({
         year: date.year(),
         month: date.month(),
         date: date.date()
       });
-      return start.isBetween(now, oneHourFromNow);
+      return start.isBetween(rangeStart, rangeEnd);
+    };
+
+    Event.prototype.isOccurringRelativeTo = function(date) {
+      var now = moment();
+      var oneHourFromNow = moment().add(1, 'hours');
+      var end = this.endTime.clone().set({
+        year: date.year(),
+        month: date.month(),
+        date: date.date()
+      });
+      return end.isBetween(now, oneHourFromNow);
     };
 
     Event.prototype.hasOccurredRelativeTo = function(date) {
@@ -62,8 +77,14 @@ angular.module('calendar').factory('EventFactory', ['$http', '$q', '$filter', 'C
     }
 
     Event.prototype.cssClass = function(date) {
-      if (this.isOccurringSoonRelativeTo(date)) {
+      if (this.isOccurringWithinXHours(date, 1)) {
         return 'occurring-soon';
+      }
+      if (this.isOccurringWithinXHours(date, 12)) {
+        return 'occurring-later';
+      }
+      if (this.isOccurringRelativeTo(date)) {
+        return 'occurring';
       }
       if (this.hasOccurredRelativeTo(date)) {
         return 'occurred';
@@ -71,52 +92,44 @@ angular.module('calendar').factory('EventFactory', ['$http', '$q', '$filter', 'C
     };
 
     Event.prototype.occursOn = function(date, period) {
-      console.log(period);
-      this.startTime = moment();
-      this.endTime = moment();
-      this.recurringDays = CalendarDays.MONDAY | CalendarDays.SATURDAY;
-      console.log(this.recurringDays);
-      function inRange(date, start, end) {
-        return date.isSameOrAfter(start) && date.isSameOrBefore(end);
+      function inRange(date, start, end, inclusive) {
+        if (inclusive) {
+          return date.isBetween(start, end, null, '[]');
+        } else {
+          return date.isBetween(start, end);
+        }
+      }
+      function onDoubleRange(min, max, start, end) {
+        var isInRange = inRange(min, start, end, true) || inRange(min, start, end);
+        var isOutRange = min.isBefore(start) && max.isAfter(end);
+        return isInRange || isOutRange;
       }
 
       var start = date.clone().startOf(period);
       var end = date.clone().endOf(period);
-      var inRange = inRange(this.startTime, start, end) || inRange(this.endTime, start, end);
+      var rangesMatch = onDoubleRange(this.startTime, this.endTime, start, end);
 
-      var fn = (d) => d.format('MMM DD, YYYY');
-      console.log(fn(this.startTime));
-      console.log(fn(this.endTime));
-      console.log(fn(date));
-      console.log('----');
-
-      if (inRange) {
+      if (rangesMatch) {
         return true;
       }
-
-      var dateYear = date.year();
-      var inRecurringRange;
-      if (this.recurringStart && this.recurringEnd) {
-        inRecurringRange = inRange(date, this.recurringStart.clone(), this.recurringEnd.clone());
-      } else if (this.recurringStart) {
-        inRecurringRange = inRange(date, this.recurringStart.clone(), moment().year(dateYear + 1));
-      } else if (this.recurringEnd) {
-        inRecurringRange = inRange(date, moment().year(dateYear - 1), this.recurringEnd.clone());
-      }
-
-      if ((this.recurringStart || this.recurringEnd) && !inRecurringRange) {
-        console.log('returning false');
+      if (!this.recurringStart && !this.recurringEnd) {
         return false;
       }
 
+      start = this.recurringStart || moment().add(2000, 'years');
+      end = this.recurringEnd || moment().subtract(2000, 'years');
+      var inRecurringRange = inRange(date, start, end, true);
+
+      if (!inRecurringRange) {
+        return false;
+      }
       if (period === 'day') {
         var binaryDay = Math.pow(2, date.day());
         return (this.recurringDays & binaryDay) > 0;
       }
 
-      console.log('here');
       var newDate = date.clone().year(this.startTime.year()).month(this.startTime.month()).day(this.startTime.day());
-      return inRange(newDate, this.startTime, this.endTime) && this.occursOn(date, 'day');
+      return inRange(newDate, this.startTime, this.endTime, true) && this.occursOn(date, 'day');
     };
 
     return Event;

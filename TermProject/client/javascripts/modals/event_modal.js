@@ -16,7 +16,7 @@ angular.module('calendar').factory('EventModal', ['$q', '$uibModal',
     EventModal.show = function(event) {
       var deferred = $q.defer();
 
-      var modal = $uibModal.open(options(event, 'show'));
+      var modal = $uibModal.open(options(event, 'view'));
       modal.result.then(deferred.resolve, deferred.reject);
 
       return deferred.promise;

@@ -2,6 +2,8 @@ angular.module('calendar').controller('CalendarController', ['$scope', '$interva
   function($scope, $interval, $stateParams, $state, $filter, EventFactory, currentUser, moment, sref, EventModal) {
     var params, current;
 
+    $interval(()=>{}, 10 * 1000);
+
     function setCurrentDates() {
       var dates = current.dates = [current.start.clone()];
       if (current.period === 'day') {
@@ -74,6 +76,7 @@ angular.module('calendar').controller('CalendarController', ['$scope', '$interva
         period: period,
         date: date.format('MM-DD-YYYY')
       };
+      $state.go(sref('calendar'), params, { notify: false });
 
       current = {
         start: date.clone(),
@@ -105,12 +108,11 @@ angular.module('calendar').controller('CalendarController', ['$scope', '$interva
     };
 
     $scope.setDate = function(date) {
-      $state.go(sref('calendar'), params, { notify: false });
       initialize(moment(date).format('MM-DD-YYYY'), params.period);
     };
 
     $scope.changeDate = function(amount) {
-      var newDate = current.start.add(amount, params.period + 's');
+      var newDate = current.start.clone().add(amount, params.period + 's');
       $scope.setDate(newDate);
     };
 
@@ -126,12 +128,35 @@ angular.module('calendar').controller('CalendarController', ['$scope', '$interva
       EventModal.show(event).then($scope.loadEvents);
     };
 
+    $scope.showEvents = function(events) {
+      EventModal.show(events).then($scope.loadEvents);
+    }
+
     $scope.eventsForDate = function(date, period) {
-      if ($scope.events) {
-        console.log($scope.events[0].occursOn(date, period));
-      }
-      return $filter('filter')($scope.events, (event) => event.occursOn(date, period));
+      return $filter('filter')($scope.events, (event) => event.occursOn(date, period)) || [];
     };
+
+    $scope.eventNames = function(date) {
+      var events = $scope.eventsForDate(date, 'hour');
+      events = $filter('filter')(events, function(event) {
+        var start = event.startTime.clone().startOf('hour');
+        var end = event.startTime.clone().endOf('hour');
+        return date.isBetween(start, end, null, '[]');
+      });
+      return events.map(event => event.title).join(', ');
+    };
+
+    $scope.cssClass = function(date) {
+      var events = $scope.eventsForDate(date, 'hour');
+      if (events.length > 0) {
+        var event = events[0];
+        var cssClass = event.cssClass(date);
+        if (!cssClass || cssClass === 'occurred') {
+          cssClass = 'occurring-later';
+        }
+        return cssClass + ' remove-border';
+      }
+    }
 
     initialize($stateParams.date, $stateParams.period);
   }
