@@ -1,5 +1,5 @@
-angular.module('calendar').controller('EventModalController', ['$scope', 'event', 'defaultState', 'EventFactory', 'NotificationService',
-  function($scope, event, defaultState, EventFactory, NotificationService) {
+angular.module('calendar').controller('EventModalController', ['$scope', '$filter', 'event', 'defaultState', 'defaultDate', 'EventFactory', 'NotificationService',
+  function($scope, $filter, event, defaultState, defaultDate, EventFactory, NotificationService) {
     $scope.state = defaultState;
     $scope.switchState = (state) => $scope.state = state;
 
@@ -26,7 +26,45 @@ angular.module('calendar').controller('EventModalController', ['$scope', 'event'
       }
     };
 
+    var calculateValues = function(event) {
+      var date = moment($scope.form.startDate);
+      var time = moment($scope.form.startTime);
+      date.set({
+        hour: time.hour(),
+        minute: time.minute(),
+        second: time.second()
+      });
+      event.startTime = date;
+
+      date = moment($scope.form.endDate);
+      time = moment($scope.form.endTime);
+      date.set({
+        hour: time.hour(),
+        minute: time.minute(),
+        second: time.second()
+      });
+      event.endTime = date;
+
+      event.recurringDays = 0;
+      if ($scope.form.recurring) {
+        if ($scope.form.recurringStart) {
+          event.recurringStart = moment($scope.form.recurringStart);
+        }
+        if ($scope.form.recurringEnd) {
+          event.recurringEnd = moment($scope.form.recurringEnd);
+        }
+
+        for (var i in $scope.recurringDays) {
+          if ($scope.recurringDays[i]) {
+            event.recurringDays = event.recurringDays | Math.pow(2, i);
+          }
+        }
+      }
+    };
+
     $scope.save = function() {
+      calculateValues($scope.event);
+
       $scope.event.save().then(function() {
         NotificationService.success($scope.event.title, 'was saved.');
         $scope.$close();
@@ -41,16 +79,59 @@ angular.module('calendar').controller('EventModalController', ['$scope', 'event'
       $scope.switchState('view');
     };
 
+    var initializeDefaults = function(event) {
+      $scope.form = {
+        recurring: angular.isDefined(event.recurringStart || event.recurringEnd),
+        recurringStart: moment(event.recurringStart).toDate(),
+        recurringEnd: moment(event.recurringEnd).toDate(),
+        startDate: (event.startTime || moment(defaultDate)).clone().toDate(),
+        startTime: (event.startTime || moment(defaultDate)).clone().toDate(),
+        endDate: (event.endTime || moment(defaultDate)).clone().toDate(),
+        endTime: (event.endTime || moment(defaultDate)).clone().toDate()
+      };
+
+      $scope.recurringDays = [false, false, false, false, false, false, false];
+      for (var i in $scope.recurringDays) {
+        var binary = Math.pow(2, i);
+        $scope.recurringDays[i] = (event.recurringDays & binary) > 0;
+      }
+    };
+
     $scope.edit = function(editedEvent) {
+      if (!editedEvent) {
+        editedEvent = new EventFactory();
+        if (!$scope.events) {
+          $scope.events = [$scope.event, editedEvent];
+        }
+      }
       $scope.event = editedEvent;
       $scope.originalEvent = angular.copy(editedEvent);
+      initializeDefaults(editedEvent);
       $scope.switchState('edit');
+    };
+
+    $scope.delete = function(deletedEvent) {
+      deletedEvent.delete().then(function() {
+        if ($scope.events) {
+          var matching = $filter('filter')($scope.events, { _id: deletedEvent._id });
+          var index = $scope.events.indexOf(matching[0]);
+          $scope.events.splice(index, 1);
+          $scope.switchState('multiple');
+        } else {
+          $scope.$close();
+        }
+      }, function() {
+        NotificationService.error(deletedEvent.title, 'could not be deleted.');
+      });
     };
 
     $scope.cancel = function() {
       if ($scope.events) {
+        if ($scope.event.isNew()) {
+          $scope.events.splice($scope.events.length - 1, 1);
+        }
         $scope.switchState('multiple');
-      } else if ($scope.event.isNew()) {
+      } else if ($scope.event.isNew() || $scope.state === 'view') {
         $scope.$close();
       } else {
         $scope.event = $scope.originalEvent;
@@ -73,5 +154,6 @@ angular.module('calendar').controller('EventModalController', ['$scope', 'event'
 
     $scope.event = angular.copy(event);
     $scope.originalEvent = angular.copy(event);
+    initializeDefaults(event);
   }
 ]);

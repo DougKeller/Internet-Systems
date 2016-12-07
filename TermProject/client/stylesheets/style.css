@@ -1,8 +1,7 @@
 body {
   padding-top: 50px;
 }
-
-.nav, .pagination, .carousel, .panel-title a {
+a {
   cursor: pointer;
 }
 

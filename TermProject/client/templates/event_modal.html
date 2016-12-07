@@ -4,70 +4,139 @@
 </div>
 <div class="modal-body">
   <section ng-if="state === 'multiple'">
-    <div ng-repeat="event in events">
-      {{ event.title }}
-      <a ng-click="edit(event)">Edit</a>
-      <a ng-click="view(event)">View</a>
-    </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <td>Title</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="event in events">
+          <td>
+            <a ng-click="view(event)">{{ event.title }}</a>
+          </td>
+          <td width="5%">
+            <a class="glyphicon glyphicon-pencil" ng-click="edit(event)"></a>
+          </td>
+          <td width="5%">
+            <a class="glyphicon glyphicon-trash" style="color: #c00" ng-click="delete(event)"></a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a ng-click="edit()"><i class="glyphicon glyphicon-plus"></i>&nbsp;New</a>
+          </td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
   </section>
-
 
   <section ng-if="state === 'view'">
-    This is the event body
-    <a ng-click="edit(event)">Edit</a>
-    <a ng-click="cancel()">Cancel</a>
-  </section>
-
-
-  <section ng-if="state === 'edit'">
-    <form ng-submit="save()">
+    <form>
       <div class="form-group">
-        <label>Title</label>
-        <input class="form-control" type="text" ng-model="event.title" required />
+        {{ event.description || 'No description available.' }}
       </div>
-      <div class="form-group">
-        <label>Description</label>
-        <textarea class="form-control" ng-model="event.description"></textarea>
-      </div>
-      <div class="form-group">
-        <label>Start Time</label>
-        <div class="datetimepicker-main" uib-dropdown>
-          <a uib-dropdown-toggle>
-            <div class="input-group">
-              <input readonly type="text" class="form-control bg-white" ng-value="event.startTime.format('MM/DD/YY h:mm a')" />
-              <span class="input-group-addon">
-                <i class="glyphicon glyphicon-calendar"></i>
-              </span>
-            </div>
-          </a>
-          <ul uib-dropdown-menu>
-            <datetimepicker ng-model="event.startTime" datetimepicker-config="pickerConfig"/>
-          </ul>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>End Time</label>
-        <div class="datetimepicker-main" uib-dropdown>
-          <a uib-dropdown-toggle>
-            <div class="input-group">
-              <input readonly type="text" class="form-control bg-white" ng-value="event.endTime.format('MM/DD/YY h:mm a')" />
-              <span class="input-group-addon">
-                <i class="glyphicon glyphicon-calendar"></i>
-              </span>
-            </div>
-          </a>
-          <ul uib-dropdown-menu>
-            <datetimepicker ng-model="event.endTime" datetimepicker-config="pickerConfig"/>
-          </ul>
-        </div>
-      </div>
-
       <div class="form-group text-center">
-        <input class="btn btn-primary form-control" type="submit" value="Save" />
+        <button class="btn btn-warning" ng-click="edit(event)">Edit</button>
+        <button class="btn btn-danger" ng-click="delete(event)">Delete</button>
       </div>
       <div class="form-group text-center">
         <a ng-click="cancel()">Cancel</a>
+        - or -
+        <a ng-click="edit()">Create New Event</a>
       </div>
+    </form>
+  </section>
+
+  <section ng-if="state === 'edit'">
+    <form ng-submit="save()" class="form-horizontal">
+        <div class="form-group">
+          <div class="col-sm-10 col-sm-offset-1">
+            <label>Title</label>
+            <input class="form-control" type="text" ng-model="event.title" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-10 col-sm-offset-1">
+            <label>Description</label>
+            <textarea class="form-control" ng-model="event.description"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-10 col-sm-offset-1">
+            <div class="col-sm-2">
+              <label>Start</label>
+            </div>
+            <div class="col-sm-5">
+              <input type="date" class="form-control" ng-model="form.startDate" />
+            </div>
+            <div class="col-sm-5">
+              <input type="time" class="form-control" ng-model="form.startTime" />
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-10 col-sm-offset-1">
+            <div class="col-sm-2">
+              <label>End</label>
+            </div>
+            <div class="col-sm-5">
+              <input type="date" class="form-control" ng-model="form.endDate" />
+            </div>
+            <div class="col-sm-5">
+              <input type="time" class="form-control" ng-model="form.endTime" />
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-10 col-sm-offset-1">
+            <div class="input-group">
+              <label><input type="checkbox" ng-model="form.recurring" /> Recurring?</label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group" ng-if="form.recurring">
+          <div class="col-sm-10 col-sm-offset-1">
+            <div class="col-sm-1 text-center">
+              <label>From</label>
+            </div>
+            <div class="col-sm-5">
+              <input type="date" class="form-control" ng-model="form.recurringStart" />
+            </div>
+            <div class="col-sm-1 text-center">
+              until
+            </div>
+            <div class="col-sm-5">
+              <input type="date" class="form-control" ng-model="form.recurringEnd" />
+            </div>
+          </div>
+        </div>
+        <div class="form-group" ng-if="form.recurring">
+          <div class="col-sm-10 col-sm-offset-1">
+            <label class="col-sm-1">on</label>
+            <div class="col-sm-11">
+              <div class="input-group center-block">
+                <div class="input-group-addon btn" ng-class="{'btn-primary active': recurringDays[0]}" ng-click="recurringDays[0] = !recurringDays[0]">Sun</div>
+                <div class="input-group-addon btn" ng-class="{'btn-primary active': recurringDays[1]}" ng-click="recurringDays[1] = !recurringDays[1]">Mon</div>
+                <div class="input-group-addon btn" ng-class="{'btn-primary active': recurringDays[2]}" ng-click="recurringDays[2] = !recurringDays[2]">Tue</div>
+                <div class="input-group-addon btn" ng-class="{'btn-primary active': recurringDays[3]}" ng-click="recurringDays[3] = !recurringDays[3]">Wed</div>
+                <div class="input-group-addon btn" ng-class="{'btn-primary active': recurringDays[4]}" ng-click="recurringDays[4] = !recurringDays[4]">Thu</div>
+                <div class="input-group-addon btn" ng-class="{'btn-primary active': recurringDays[5]}" ng-click="recurringDays[5] = !recurringDays[5]">Fri</div>
+                <div class="input-group-addon btn" ng-class="{'btn-primary active': recurringDays[6]}" ng-click="recurringDays[6] = !recurringDays[6]">Sat</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group text-center">
+          <input class="btn btn-primary" type="submit" value="Save" />
+          <input class="btn btn-danger" type="button" value="Delete" />
+        </div>
+        <div class="form-group text-center">
+          <a ng-click="cancel()">Cancel</a>
+        </div>
     </form>
   </section>
 </div>

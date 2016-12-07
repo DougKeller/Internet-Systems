@@ -37,12 +37,22 @@ angular.module('calendar').factory('EventFactory', ['$http', '$q', '$filter', 'C
     };
 
     Event.prototype.save = function() {
-      var url = '/events';
-      return $http.post(url, this)
+      if (this.isNew()) {
+        var url = '/events';
+        return $http.post(url, this)
+      } else {
+        var url = '/events/' + this._id;
+        return $http.put(url, this);
+      }
+    };
+
+    Event.prototype.delete = function() {
+      var url = '/events/' + this._id;
+      return $http.delete(url, this);
     };
 
     Event.prototype.isNew = function() {
-      return angular.isUndefined(this.id);
+      return angular.isUndefined(this._id);
     };
 
     Event.prototype.isOccurringWithinXHours = function(date, hours) {

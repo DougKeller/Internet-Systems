@@ -119,7 +119,7 @@ angular.module('calendar').controller('CalendarController', ['$scope', '$interva
     $scope.createEvent = function(date) {
       var newEvent = new EventFactory({
         startTime: date.clone(),
-        endTime: date.clone().add(1, 'hours')
+        endTime: date.clone()
       });
       EventModal.edit(newEvent).then($scope.loadEvents);
     };
@@ -128,13 +128,13 @@ angular.module('calendar').controller('CalendarController', ['$scope', '$interva
       EventModal.show(event).then($scope.loadEvents);
     };
 
-    $scope.showEvents = function(events) {
-      EventModal.show(events).then($scope.loadEvents);
-    }
-
     $scope.eventsForDate = function(date, period) {
       return $filter('filter')($scope.events, (event) => event.occursOn(date, period)) || [];
     };
+
+    $scope.showEvents = function(date, period) {
+      EventModal.show($scope.eventsForDate(date, period), date).then($scope.loadEvents);
+    }
 
     $scope.eventNames = function(date) {
       var events = $scope.eventsForDate(date, 'hour');

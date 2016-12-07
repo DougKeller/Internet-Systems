@@ -7,7 +7,7 @@ var Event = mongoose.model('Event');
 
 var authenticate = require('express-jwt')({ secret: process.env.JWT_SECRET, userProperty: 'userToken' });
 
-router.post('/', authenticate, function(request, response, next) {
+function saveEvent(event, request, response, next) {
   var permittedAttributes = [
     'title',
     'startTime',
@@ -15,21 +15,21 @@ router.post('/', authenticate, function(request, response, next) {
     'description',
     'recurringStart',
     'recurringEnd',
-    'recurringDays',
-    'owner'
+    'recurringDays'
   ];
 
-  var event = new Event();
   permittedAttributes.forEach(attr => event[attr] = request.body[attr]);
-  event.createdAt = event.updatedAt = new Date();
+
+  if (event._id) {
+    event.createdAt = event.updatedAt = new Date();
+  } else {
+    event.updatedAt = new Date();
+  }
 
   if (!event.startTime) {
     return response.status(422).json({
       start_time: 'cant\'t be blank'
     });
-  }
-  if (!event.endTime) {
-    event.endTime = event.startTime.clone();
   }
 
   event.save(function(error) {
@@ -38,7 +38,21 @@ router.post('/', authenticate, function(request, response, next) {
     }
 
     return response.json(event);
-  })
+  });
+};
+
+router.post('/', authenticate, function(request, response, next) {
+  var event = new Event();
+  return saveEvent(event, request, response, next);
+});
+
+router.put('/:id', authenticate, function(request, response, next) {
+  Event.findOne({ _id: request.params.id }, function(error, event) {
+    if (error || !event) {
+      return next(error);
+    }
+    return saveEvent(event, request, response, next);
+  });
 });
 
 router.get('/', authenticate, function(request, response, next) {
@@ -50,13 +64,12 @@ router.get('/', authenticate, function(request, response, next) {
   });
 });
 
-router.get('/:id', authenticate, function(request, response, next) {
-  var userId = request.params.id;
-  Event.findOne({ _id: userId }, function(error, user) {
-    if (error || !user) {
+router.delete('/:id', authenticate, function(request, response, next) {
+  Event.remove({_id: request.params.id}, function(error, events) {
+    if (error) {
       return next(error);
     }
-    response.json(user);
+    response.json(true);
   });
 });
 
