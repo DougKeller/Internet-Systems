@@ -23,6 +23,15 @@ router.post('/', authenticate, function(request, response, next) {
   permittedAttributes.forEach(attr => event[attr] = request.body[attr]);
   event.createdAt = event.updatedAt = new Date();
 
+  if (!event.startTime) {
+    return response.status(422).json({
+      start_time: 'cant\'t be blank'
+    });
+  }
+  if (!event.endTime) {
+    event.endTime = event.startTime.clone();
+  }
+
   event.save(function(error) {
     if (error) {
       return next(error);

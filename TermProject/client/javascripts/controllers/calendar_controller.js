@@ -1,5 +1,5 @@
-angular.module('calendar').controller('CalendarController', ['$scope', '$interval', '$stateParams', '$state', 'EventFactory', 'currentUser', 'moment', 'sref',
-  function($scope, $interval, $stateParams, $state, EventFactory, currentUser, moment, sref) {
+angular.module('calendar').controller('CalendarController', ['$scope', '$interval', '$stateParams', '$state', '$filter', 'EventFactory', 'currentUser', 'moment', 'sref', 'EventModal',
+  function($scope, $interval, $stateParams, $state, $filter, EventFactory, currentUser, moment, sref, EventModal) {
     var params, current;
 
     function setCurrentDates() {
@@ -114,11 +114,23 @@ angular.module('calendar').controller('CalendarController', ['$scope', '$interva
       $scope.setDate(newDate);
     };
 
-    $scope.goToDailyView = function(date) {
-      $state.go(sref('calendar'), {
-        date: date.format('MM-DD-YYYY'),
-        period: 'day'
+    $scope.createEvent = function(date) {
+      var newEvent = new EventFactory({
+        startTime: date.clone(),
+        endTime: date.clone().add(1, 'hours')
       });
+      EventModal.edit(newEvent).then($scope.loadEvents);
+    };
+
+    $scope.showEvent = function(event) {
+      EventModal.show(event).then($scope.loadEvents);
+    };
+
+    $scope.eventsForDate = function(date, period) {
+      if ($scope.events) {
+        console.log($scope.events[0].occursOn(date, period));
+      }
+      return $filter('filter')($scope.events, (event) => event.occursOn(date, period));
     };
 
     initialize($stateParams.date, $stateParams.period);

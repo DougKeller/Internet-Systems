@@ -11,7 +11,7 @@
       <tbody>
         <tr>
           <td style="padding: 0px;" class="calendar-column" ng-repeat="date in current.dates">
-            <div class="calendar-subdivision" ng-repeat="sub in date.subdivisions">
+            <div class="calendar-subdivision" ng-repeat="sub in date.subdivisions" ng-click="createEvent(sub)">
               <div class="time">
                 {{ sub.format('h:mm a') }}
               </div>
