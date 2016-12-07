@@ -78,7 +78,7 @@ angular.module('calendar').controller('CalendarController', ['$scope', '$interva
       current = {
         start: date.clone(),
         end: date.endOf(period).clone(),
-        templateUrl: 'templates/calendar_' + period + '.html',
+        templateUrl: 'calendar_' + period + '.html',
         period: period
       };
 

@@ -34,11 +34,11 @@ angular.module('calendar').constant('$states', function() {
       abstract: true,
       views: {
         notification: {
-          templateUrl: 'templates/notification.html'
+          templateUrl: 'notification.html'
         },
         navigation: {
           controller: 'NavigationController',
-          templateUrl: 'templates/navigation.html'
+          templateUrl: 'navigation.html'
         },
         content: {
           template: '<ui-view></ui-view>'
@@ -50,14 +50,14 @@ angular.module('calendar').constant('$states', function() {
         {
           url: '/login',
           controller: 'LoginController',
-          templateUrl: 'templates/login.html'
+          templateUrl: 'login.html'
         }
       ),
       new State('register',
         {
           url: '/register',
           controller: 'RegisterController',
-          templateUrl: 'templates/register.html'
+          templateUrl: 'register.html'
         }
       ),
       new State('authenticated',
@@ -84,7 +84,7 @@ angular.module('calendar').constant('$states', function() {
             {
               url: '/calendar?date&period',
               controller: 'CalendarController',
-              templateUrl: 'templates/calendar.html'
+              templateUrl: 'calendar.html'
             }
           )
         ]
