@@ -11,7 +11,7 @@ var EventSchema = new Schema({
   recurringStart: Date,
   recurringEnd: Date,
   recurringDays: { type: Number, default: 0 },
-  owner: { type: Schema.Types.ObjectId, ref: 'User' }
+  ownerId: String
 });
 
 EventSchema.set('toJSON', {

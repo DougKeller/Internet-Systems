@@ -26,6 +26,8 @@ function saveEvent(event, request, response, next) {
     event.updatedAt = new Date();
   }
 
+  event.ownerId = request.userToken.id;
+
   if (!event.startTime) {
     return response.status(422).json({
       start_time: 'cant\'t be blank'
@@ -56,7 +58,7 @@ router.put('/:id', authenticate, function(request, response, next) {
 });
 
 router.get('/', authenticate, function(request, response, next) {
-  Event.find(function(error, events) {
+  Event.find({ ownerId: request.userToken.id }, function(error, events) {
     if (error) {
       return next(error);
     }
