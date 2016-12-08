@@ -193,6 +193,9 @@ a {
 .content span.occurred .title {
   text-decoration: line-through;
 }
+.occurred .row {
+  text-decoration: line-through;
+}
 .normal-pointer {
   cursor: default;
 }
