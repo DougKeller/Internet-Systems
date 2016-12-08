@@ -150,7 +150,10 @@ angular.module('calendar').factory('EventFactory', ['$http', '$q', '$filter', 'C
         date: date.date()
       });
 
-      return inRange(date, start, end);
+      var recStart = this.recurringStart || moment().subtract(1000, 'years');
+      var recEnd = this.recurringEnd || moment().add(1000, 'years');
+
+      return inRange(date, start, end) && (!this.recurring() || inRange(date, recStart, recEnd));
     };
 
     return Event;
