@@ -106,7 +106,7 @@ angular.module('calendar').factory('EventFactory', ['$http', '$q', '$filter', 'C
     };
 
     var doubleInRange = function(dateMin, dateMax, min, max) {
-      var iRange = inRange(dateMax, min, max) || inRange(dateMax, min, max);
+      var iRange = inRange(dateMin, min, max) || inRange(dateMax, min, max);
       var oRange = inRange(min, dateMin, dateMax) && inRange(max, dateMin, dateMax);
       return iRange || oRange;
     };
@@ -134,7 +134,8 @@ angular.module('calendar').factory('EventFactory', ['$http', '$q', '$filter', 'C
     Event.prototype.occursOn = function(date, period) {
       var binaryDay = Math.pow(2, date.day());
       var matchesDay = (this.recurringDays & binaryDay) > 0;
-      if (!matchesDay && !doubleInRange(this.startTime, this.endTime, date.startOf('day'), date.endOf('day'))) {
+
+      if (!matchesDay && !doubleInRange(this.startTime, this.endTime, date.clone().startOf('day'), date.clone().endOf('day'))) {
         return false;
       }
 
