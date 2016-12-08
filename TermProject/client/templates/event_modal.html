@@ -38,6 +38,21 @@
       <div class="form-group">
         {{ event.description || 'No description available.' }}
       </div>
+      <div class="form-group" ng-if="event.recurring()">
+        Recurring from
+        <label>{{ event.recurringStart ? event.recurringStart.format('MMM D, YYYY') : '?' }}</label>
+        until
+        <label>{{ event.recurringEnd ? event.recurringEnd.format('MMM D, YYYY') : '?' }}</label>.
+        <div class="input-group center-block">
+          <div class="input-group-addon btn normal-pointer" ng-class="{'btn-primary active': event.binComp(0)}">Sun</div>
+          <div class="input-group-addon btn normal-pointer" ng-class="{'btn-primary active': event.binComp(1)}">Mon</div>
+          <div class="input-group-addon btn normal-pointer" ng-class="{'btn-primary active': event.binComp(2)}">Tue</div>
+          <div class="input-group-addon btn normal-pointer" ng-class="{'btn-primary active': event.binComp(3)}">Wed</div>
+          <div class="input-group-addon btn normal-pointer" ng-class="{'btn-primary active': event.binComp(4)}">Thu</div>
+          <div class="input-group-addon btn normal-pointer" ng-class="{'btn-primary active': event.binComp(5)}">Fri</div>
+          <div class="input-group-addon btn normal-pointer" ng-class="{'btn-primary active': event.binComp(6)}">Sat</div>
+        </div>
+      </div>
       <div class="form-group text-center">
         <button class="btn btn-warning" ng-click="edit(event)">Edit</button>
         <button class="btn btn-danger" ng-click="delete(event)">Delete</button>

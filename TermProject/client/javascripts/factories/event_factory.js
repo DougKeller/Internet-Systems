@@ -101,6 +101,10 @@ angular.module('calendar').factory('EventFactory', ['$http', '$q', '$filter', 'C
       };
     };
 
+    Event.prototype.binComp = function(day) {
+      return (this.recurringDays & Math.pow(2, day)) > 0;
+    };
+
     var inRange = function(date, min, max) {
       return date.isBetween(min, max, null, '[)');
     };
@@ -112,7 +116,7 @@ angular.module('calendar').factory('EventFactory', ['$http', '$q', '$filter', 'C
     };
 
     Event.prototype.recurring = function() {
-      return angular.isDefined(this.recurringStart) || angular.isDefined(this.recurringEnd());
+      return angular.isDefined(this.recurringStart) || angular.isDefined(this.recurringEnd);
     };
 
     Event.prototype.startsAt = function(date, period) {
@@ -132,6 +136,12 @@ angular.module('calendar').factory('EventFactory', ['$http', '$q', '$filter', 'C
     };
 
     Event.prototype.occursOn = function(date, period) {
+      if (this.startTime.isSame(this.endTime)) {
+        var start = date.clone().startOf(period);
+        var end = date.clone().endOf(period);
+        return inRange(this.startTime, start, end);
+      }
+
       var binaryDay = Math.pow(2, date.day());
       var matchesDay = (this.recurringDays & binaryDay) > 0;
 

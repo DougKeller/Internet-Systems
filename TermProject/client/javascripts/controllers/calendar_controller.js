@@ -129,7 +129,8 @@ angular.module('calendar').controller('CalendarController', ['$scope', '$interva
     };
 
     $scope.eventsForDate = function(date, period) {
-      return $filter('filter')($scope.events, (event) => event.occursOn(date, period)) || [];
+      var events = $filter('filter')($scope.events, (event) => event.occursOn(date, period)) || [];
+      return events.sort((a, b) => a.startTime.hour() - b.startTime.hour());
     };
 
     $scope.showEvents = function(date, period) {
@@ -146,10 +147,7 @@ angular.module('calendar').controller('CalendarController', ['$scope', '$interva
       var events = $scope.eventsForDate(date, 'hour');
       if (events.length > 0) {
         var event = events[0];
-        var cssClass = event.cssClass(date);
-        if (!cssClass || cssClass === 'occurred') {
-          cssClass = 'occurring-later';
-        }
+        var cssClass = event.cssClass(date) || '';
         return cssClass + ' remove-border';
       }
     }

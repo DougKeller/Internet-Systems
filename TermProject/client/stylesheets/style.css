@@ -176,9 +176,6 @@ a {
   color: #4F8A10;
   background-color: #DFF2BF !important;
 }
-.occurring-soon .time {
-  color: #4F8A10 !important;
-}
 .occurred {
   color: #ccc;
   background-color: rgba(0,0,0,0) !important;
@@ -195,6 +192,9 @@ a {
 }
 .content span.occurred .title {
   text-decoration: line-through;
+}
+.normal-pointer {
+  cursor: default;
 }
 
 .bg-white {
