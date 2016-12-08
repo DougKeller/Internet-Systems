@@ -148,7 +148,7 @@ angular.module('calendar').controller('CalendarController', ['$scope', '$interva
       if (events.length > 0) {
         var event = events[0];
         var cssClass = event.cssClass(date) || '';
-        return cssClass + ' remove-border';
+        return cssClass + (cssClass === 'occurred' ? '' : ' remove-border');
       }
     }
 
