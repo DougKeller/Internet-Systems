@@ -104,7 +104,7 @@ a {
 .calendar-subdivision .time {
   position: absolute;
   padding-left: 5px;
-  bottom: 0px;
+  top: 5px;
   left: 0px;
   font-size: 0.8rem;
   color: #ddd;

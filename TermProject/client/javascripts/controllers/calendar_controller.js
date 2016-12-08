@@ -42,7 +42,7 @@ angular.module('calendar').controller('CalendarController', ['$scope', '$interva
       }
       current.dates.forEach(function(date) {
         date.subdivisions = [];
-        for (var i = 1; i <= 24; i += 1) {
+        for (var i = 0; i < 24; i += 1) {
           date.subdivisions.push(date.clone().add(i, 'hours'));
         }
       });
@@ -138,11 +138,7 @@ angular.module('calendar').controller('CalendarController', ['$scope', '$interva
 
     $scope.eventNames = function(date) {
       var events = $scope.eventsForDate(date, 'hour');
-      events = $filter('filter')(events, function(event) {
-        var start = event.startTime.clone().startOf('hour');
-        var end = event.startTime.clone().endOf('hour');
-        return date.isBetween(start, end, null, '[]');
-      });
+      events = $filter('filter')(events, event => event.startsAt(date, 'hour'));
       return events.map(event => event.title).join(', ');
     };
 

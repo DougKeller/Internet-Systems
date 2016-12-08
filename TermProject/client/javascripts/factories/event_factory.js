@@ -101,42 +101,55 @@ angular.module('calendar').factory('EventFactory', ['$http', '$q', '$filter', 'C
       };
     };
 
-    Event.prototype.occursOn = function(date, period) {
-      function inRange(date, start, end, inclusive) {
-        return date.isBetween(start, end, null, inclusive);
-      }
+    var inRange = function(date, min, max) {
+      return date.isBetween(min, max, null, '[)');
+    };
 
-      function onDoubleRange(min, max, start, end) {
-        var isInRange = inRange(min, start, end, '[)') || inRange(min, start, end, '[)');
-        var isOutRange = min.isBefore(start) && max.isAfter(end);
-        return isInRange || isOutRange;
-      }
+    var doubleInRange = function(dateMin, dateMax, min, max) {
+      var iRange = inRange(dateMax, min, max) || inRange(dateMax, min, max);
+      var oRange = inRange(min, dateMin, dateMax) && inRange(max, dateMin, dateMax);
+      return iRange || oRange;
+    };
 
-      var start = date.clone().startOf(period);
-      var end = date.clone().endOf(period);
-      var rangesMatch = onDoubleRange(this.startTime, this.endTime, start, end);
+    Event.prototype.recurring = function() {
+      return angular.isDefined(this.recurringStart) || angular.isDefined(this.recurringEnd());
+    };
 
-      if (rangesMatch) {
+    Event.prototype.startsAt = function(date, period) {
+      if (period === 'day') {
         return true;
       }
-      if (!this.recurringStart && !this.recurringEnd) {
+
+      var eventDate = this.startTime.clone().set({
+        year: date.year(),
+        month: date.month(),
+        date: date.date()
+      });
+      var rangeStart = date.clone().startOf(period);
+      var rangeEnd = date.clone().endOf(period);
+
+      return inRange(eventDate, rangeStart, rangeEnd);
+    };
+
+    Event.prototype.occursOn = function(date, period) {
+      var binaryDay = Math.pow(2, date.day());
+      var matchesDay = (this.recurringDays & binaryDay) > 0;
+      if (!matchesDay && !doubleInRange(this.startTime, this.endTime, date.startOf('day'), date.endOf('day'))) {
         return false;
       }
 
-      start = this.recurringStart || moment().subtract(2000, 'years');
-      end = this.recurringEnd || moment().add(2000, 'years');
-      var inRecurringRange = inRange(date, start, end, '[)');
-      if (!inRecurringRange) {
-        return false;
-      }
+      var start = this.startTime.clone().set({
+        year: date.year(),
+        month: date.month(),
+        date: date.date()
+      }).startOf(period);
+      var end = this.endTime.clone().set({
+        year: date.year(),
+        month: date.month(),
+        date: date.date()
+      });
 
-      if (period === 'day') {
-        var binaryDay = Math.pow(2, date.day());
-        return (this.recurringDays & binaryDay) > 0;
-      }
-
-      var newDate = date.clone().year(this.startTime.year()).month(this.startTime.month()).day(this.startTime.day());
-      return inRange(newDate, this.startTime, this.endTime, '[]') && this.occursOn(date, 'day');
+      return inRange(date, start, end);
     };
 
     return Event;
