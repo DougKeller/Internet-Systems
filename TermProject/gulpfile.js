@@ -62,10 +62,12 @@ gulp.task('buildFonts', function() {
              .pipe(gulp.dest('./public/fonts'));
 });
 
+gulp.task('build', ['buildTemplates', 'buildJavascript', 'buildStyles', 'buildFonts']);
+
 gulp.task('start', function() {
   nodemon({
     script: './bin/www',
-    tasks: ['buildTemplates', 'buildJavascript', 'buildStyles', 'buildFonts'],
+    tasks: ['build'],
     ext: 'js ejs html css',
     ignore: ['application.js', 'application.css', 'templates.js']
   })
