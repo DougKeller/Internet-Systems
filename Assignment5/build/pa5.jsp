@@ -29,6 +29,7 @@
           </tr>
         </thead>
         <tbody>
+          <%@ page import="java.io.*" %>
           <%@ page import="java.sql.*" %>
           <%@ page import="java.util.Map" %>
           <%@ page import="java.util.HashMap" %>
@@ -54,15 +55,17 @@
             Statement statement = connection.createStatement();
 
             String action = request.getParameter("action");
-            if (action.equals("create")) {
-              String valueString = String.format("%s, %s, %s, %s", form.get("first_name"), form.get("last_name"), form.get("phone_number"), form.get("address"));
-              statement.execute("INSERT INTO users (first_name, last_name, phone_number, address) VALUES (" + valueString + ")");
-            } else if (action.equals("update")) {
-              String id = request.getParameter("user_id");
-              statement.executeUpdate(String.format("UPDATE users SET first_name = %s, last_name = %s, phone_number = %s, address = %s WHERE id = %s", form.get("first_name"), form.get("last_name"), form.get("phone_number"), form.get("address"), id));
-            } else if (action.equals("delete")) {
-              String id = request.getParameter("user_id");
-              statement.execute(String.format("DELETE FROM users WHERE id = %s", id));
+            if (action != null) {
+              if (action.equals("create")) {
+                String valueString = String.format("%s, %s, %s, %s", form.get("first_name"), form.get("last_name"), form.get("phone_number"), form.get("address"));
+                statement.execute("INSERT INTO users (first_name, last_name, phone_number, address) VALUES (" + valueString + ")");
+              } else if (action.equals("update")) {
+                String id = request.getParameter("user_id");
+                statement.executeUpdate(String.format("UPDATE users SET first_name = %s, last_name = %s, phone_number = %s, address = %s WHERE id = %s", form.get("first_name"), form.get("last_name"), form.get("phone_number"), form.get("address"), id));
+              } else if (action.equals("delete")) {
+                String id = request.getParameter("user_id");
+                statement.execute(String.format("DELETE FROM users WHERE id = %s", id));
+              }
             }
 
             ResultSet result = statement.executeQuery("SELECT * FROM users");
